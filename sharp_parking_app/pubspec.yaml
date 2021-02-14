@@ -56,6 +56,7 @@ flutter:
         - asset: assets/fonts/Roboto/Roboto-Black.ttf
         - asset: assets/fonts/Roboto/Roboto-BlackItalic.ttf
         - asset: assets/fonts/Roboto/Roboto-Bold.ttf
+          weight: 700
         - asset: assets/fonts/Roboto/Roboto-BoldItalic.ttf
         - asset: assets/fonts/Roboto/Roboto-Italic.ttf
         - asset: assets/fonts/Roboto/Roboto-Light.ttf

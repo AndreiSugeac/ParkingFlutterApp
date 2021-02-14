@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'package:sharp_parking_app/constants/colors.dart';
+import './login.dart';
+import './signup.dart';
+
+
 class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -18,8 +23,8 @@ class WelcomeScreen extends StatelessWidget {
             'Welcome',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
+              fontSize: 20,
             )
           ),
           alignment: Alignment.center,
@@ -32,6 +37,41 @@ class WelcomeScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               textDirection: TextDirection.ltr,
               style: TextStyle(color: Color.fromRGBO(112, 112, 112, 1)),
+            ),
+          ),
+        ),
+        Container(
+          width: 0.75 * size.width,
+          child: RaisedButton(
+            onPressed: () {
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Login()),
+              );
+            },
+            child: Text(
+              'SIGN IN',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white),
+            ),
+            color: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(7),
+            ),
+          ),
+        ),
+        Container(
+          child: FlatButton(
+            onPressed: () {
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignUp()),
+              );
+            },
+            color: Colors.transparent,
+            child: Text(
+              'CREATE A NEW ACCOUNT',
+              style: TextStyle(color: Colors.black),
             ),
           ),
         )
