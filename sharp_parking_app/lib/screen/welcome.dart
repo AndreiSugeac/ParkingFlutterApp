@@ -10,9 +10,10 @@ import 'package:sharp_parking_app/constants/buttons/transparent_button.dart';
 class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Column(
       children: <Widget>[
-        SizedBox(height: 50),
+        SizedBox(height: 0.07 * size.height),
         IconSharP(),
         Container(
           child: Text(
