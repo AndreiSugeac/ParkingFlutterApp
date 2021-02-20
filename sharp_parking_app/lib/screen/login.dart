@@ -8,13 +8,13 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FocusNode passwordFocusNode = new FocusNode();
-
+    Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Column(
           children: <Widget>[
-            SizedBox(height: 50),
+            SizedBox(height: 0.07 * size.height),
             IconSharP(),
             Container(
               child: Text(
@@ -44,7 +44,7 @@ class Login extends StatelessWidget {
                           hintText: 'Enter email',
                         ),
                       ),
-                      SizedBox(height: 30),
+                      SizedBox(height: 0.035 * size.height),
                       TextFormField(
                         focusNode: passwordFocusNode,
                         decoration: InputDecoration(
