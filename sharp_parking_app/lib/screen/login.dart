@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:sharp_parking_app/constants/sharp_icon.dart';
+import 'package:sharp_parking_app/constants/icons/sharp_icon.dart';
 import 'package:sharp_parking_app/constants/colors.dart';
 import 'package:sharp_parking_app/constants/buttons/long_button.dart';
+import 'package:sharp_parking_app/screen/home.dart';
 
 class Login extends StatelessWidget {
   @override
@@ -89,7 +90,7 @@ class Login extends StatelessWidget {
               ),
               alignment: Alignment.center,
             ),
-            LongButton('SIGN IN', primaryColor, Login()),
+            LongButton('SIGN IN', primaryColor, Home()),
           ],
         ),
       )
