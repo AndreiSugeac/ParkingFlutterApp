@@ -31,6 +31,14 @@ dependencies:
 
   flutter_svg: ^0.18.0
 
+  http: ^0.12.2
+
+  dio: ^3.0.10
+
+  fluttertoast: ^7.1.6
+
+  jwt_decode: ^0.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

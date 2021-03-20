@@ -8,6 +8,11 @@ import 'package:sharp_parking_app/constants/buttons/long_button.dart';
 import 'package:sharp_parking_app/constants/buttons/transparent_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
+  
+  bool next() {
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -37,7 +42,7 @@ class WelcomeScreen extends StatelessWidget {
             ),
           ),
         ),
-        LongButton('SIGN IN', primaryColor, Login()),
+        LongButton('SIGN IN', primaryColor, Login(), true, next),
         TransparentButton('CREATE NEW ACCOUNT', SignUp()),
       ],
     );
