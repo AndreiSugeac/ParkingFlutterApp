@@ -3,7 +3,7 @@ import 'package:sharp_parking_app/constants/colors.dart';
 
 class HomeScreenBtn extends StatelessWidget {
   final Widget _btnIcon;
-  final Widget _btnRoute;
+  final dynamic _btnRoute;
 
   HomeScreenBtn(this._btnIcon, this._btnRoute);
   
@@ -15,10 +15,7 @@ class HomeScreenBtn extends StatelessWidget {
       height: 0.17 * size.height,
       child: RaisedButton(
         onPressed: () {
-            Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => _btnRoute),
-          );
+          _btnRoute();
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30)

@@ -1,10 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:sharp_parking_app/DTO/User.dart';
 import 'package:sharp_parking_app/constants/buttons/home_screen_button.dart';
 import 'package:sharp_parking_app/constants/colors.dart';
 import 'package:sharp_parking_app/constants/icons/location_icon.dart';
 import 'package:sharp_parking_app/constants/icons/parking_block_icon.dart';
+import 'package:sharp_parking_app/services/user_services.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  
+  final String _token;
+
+  Home(this._token);
+
+  _Home createState() => _Home(_token);
+}
+
+class _Home extends State<Home> {
+
+  final String _token;
+  User user;
+
+  _Home(this._token);
+
+  void tokenToUser() {
+    user = User.fromJson(Jwt.parseJwt(_token));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    tokenToUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -34,7 +62,7 @@ class Home extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'John Doe',
+                          user.firstName + ' ' + user.lastName,
                           style: TextStyle(
                             fontSize: 17,
                             color: Colors.black,
@@ -81,7 +109,7 @@ class Home extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  HomeScreenBtn(ParkingBlockIcon(), null),
+                  HomeScreenBtn(ParkingBlockIcon(), UserServices().getAllUsers),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
@@ -150,8 +178,8 @@ class Home extends StatelessWidget {
               ),
             ), 
           ],
-        ),
-      ),
+        )
+      )
     );
   }
 }
