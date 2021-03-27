@@ -5,6 +5,7 @@ import 'package:sharp_parking_app/constants/buttons/home_screen_button.dart';
 import 'package:sharp_parking_app/constants/colors.dart';
 import 'package:sharp_parking_app/constants/icons/location_icon.dart';
 import 'package:sharp_parking_app/constants/icons/parking_block_icon.dart';
+import 'package:sharp_parking_app/screen/parking_finder.dart';
 import 'package:sharp_parking_app/services/user_services.dart';
 
 class Home extends StatefulWidget {
@@ -146,7 +147,7 @@ class _Home extends State<Home> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  HomeScreenBtn(LocationIcon(), null),
+                  HomeScreenBtn(LocationIcon(), ParkingFinder()),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),

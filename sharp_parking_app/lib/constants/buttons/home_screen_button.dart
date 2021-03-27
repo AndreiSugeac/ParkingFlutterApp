@@ -6,6 +6,14 @@ class HomeScreenBtn extends StatelessWidget {
   final dynamic _btnRoute;
 
   HomeScreenBtn(this._btnIcon, this._btnRoute);
+
+  // Button styles
+  final ButtonStyle raisedBtnStyle = ElevatedButton.styleFrom(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(30)
+    ),
+    padding: EdgeInsets.all(0.0),
+  );
   
   @override
   Widget build(BuildContext context) {
@@ -13,14 +21,14 @@ class HomeScreenBtn extends StatelessWidget {
     return Container(
       width: 0.23 * size.width,
       height: 0.17 * size.height,
-      child: RaisedButton(
+      child: ElevatedButton(
         onPressed: () {
-          _btnRoute();
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => _btnRoute),
+            );
         },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30)
-        ),
-        padding: EdgeInsets.all(0.0),
+        style: raisedBtnStyle,
         child: Ink(
           decoration: BoxDecoration(
             gradient: LinearGradient(colors: [primaryColor, secondaryGradientColor],

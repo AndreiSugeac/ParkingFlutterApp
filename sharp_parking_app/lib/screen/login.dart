@@ -32,6 +32,20 @@ class _Login extends State<Login> {
     return tkn;
   }
 
+  // Styles for buttons
+  final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+    backgroundColor: Colors.transparent,
+    alignment: Alignment.topRight,
+    padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+  );
+
+  final ButtonStyle loginBtnStyle = TextButton.styleFrom(
+    backgroundColor: primaryColor,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(7),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     FocusNode passwordFocusNode = new FocusNode();
@@ -89,21 +103,19 @@ class _Login extends State<Login> {
               ),
             ),
             Container(
-              child: FlatButton(
+              child: TextButton(
                 onPressed: () {
                     Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Login()),
                   );
                 },
-                color: Colors.transparent,
                 child: Text(
                   'Forgot your password?',
                   style: TextStyle(color: primaryColor),
                 ),
+                style: flatButtonStyle,
               ),
-              alignment: Alignment.topRight,
-              padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
             ),
             Container(
               child: CheckboxListTile(
@@ -123,7 +135,7 @@ class _Login extends State<Login> {
             Container(
               width: 0.75 * size.width,
               height: 0.06 * size.height,
-              child: RaisedButton(
+              child: ElevatedButton(
                 onPressed: () async {
                   token = await authentication();
                   if(token != null) {
@@ -138,10 +150,7 @@ class _Login extends State<Login> {
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white),
                 ),
-                color: primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(7),
-                ),
+                style: loginBtnStyle,
               ),
             ),
           ],

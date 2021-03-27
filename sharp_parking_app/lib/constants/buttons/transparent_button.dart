@@ -6,21 +6,26 @@ class TransparentButton extends StatelessWidget {
 
   TransparentButton(this._btnText, this._btnRoute);
 
+  // Button style
+  final ButtonStyle transparentBtnStyle = TextButton.styleFrom(
+    backgroundColor: Colors.transparent,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: FlatButton(
+      child: TextButton(
         onPressed: () {
             Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => _btnRoute),
           );
         },
-        color: Colors.transparent,
         child: Text(
           _btnText,
           style: TextStyle(color: Colors.black),
         ),
+        style: transparentBtnStyle,
       ),
     );
   }
