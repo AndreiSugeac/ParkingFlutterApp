@@ -86,7 +86,6 @@ class _SignUpState extends State<SignUp> {
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: false,
-        resizeToAvoidBottomPadding: false,
         body: SingleChildScrollView(
           reverse: true,
           child: Padding(
