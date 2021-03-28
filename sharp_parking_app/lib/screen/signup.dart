@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:sharp_parking_app/constants/buttons/long_button.dart';
+import 'package:sharp_parking_app/widgets/buttons/long_button.dart';
 
-import 'package:sharp_parking_app/constants/colors.dart';
-import 'package:sharp_parking_app/constants/icons/sharp_icon.dart';
-import 'package:sharp_parking_app/constants/toasts/success_toast.dart';
-import 'package:sharp_parking_app/constants/toasts/warning_toast.dart';
+import 'package:sharp_parking_app/utils/colors.dart';
+import 'package:sharp_parking_app/widgets/icons/sharp_icon.dart';
+import 'package:sharp_parking_app/widgets/toasts/success_toast.dart';
+import 'package:sharp_parking_app/widgets/toasts/warning_toast.dart';
 import 'package:sharp_parking_app/screen/login.dart';
 import 'package:sharp_parking_app/services/user_services.dart';
 

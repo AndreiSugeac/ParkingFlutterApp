@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:sharp_parking_app/constants/toasts/warning_toast.dart';
+import 'package:sharp_parking_app/widgets/toasts/warning_toast.dart';
  
 class UserServices {
   Dio dio = new Dio();
