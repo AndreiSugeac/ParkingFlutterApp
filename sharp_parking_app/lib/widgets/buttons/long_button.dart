@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sharp_parking_app/constants/colors.dart';
+import 'package:sharp_parking_app/utils/colors.dart';
 
 class LongButton extends StatelessWidget {
   final Color _btnColor;

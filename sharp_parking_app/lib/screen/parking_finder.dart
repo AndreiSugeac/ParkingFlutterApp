@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:sharp_parking_app/constants/colors.dart';
+import 'package:sharp_parking_app/utils/colors.dart';
 
 class ParkingFinder extends StatefulWidget {
   @override
@@ -58,7 +58,7 @@ class _ParkingFinderState extends State<ParkingFinder> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18)
                           ),
-                          child: SvgPicture.asset('assets/icons/HomeIcon.svg', width: size.width * 0.075, height: size.width * 0.075, color: primaryColor,),
+                          child: SvgPicture.asset('assets/icons/HomeIcon.svg', width: size.width * 0.075, height: size.width * 0.075, color: primaryColor),
                         ),
                         onPressed: () => {},
                         style: ElevatedButton.styleFrom(
