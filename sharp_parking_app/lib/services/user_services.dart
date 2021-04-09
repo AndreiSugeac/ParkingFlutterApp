@@ -1,17 +1,24 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:sharp_parking_app/DTO/User.dart';
+import 'package:sharp_parking_app/screen/login.dart';
+import 'package:sharp_parking_app/services/secure_storage_services.dart';
+import 'package:sharp_parking_app/utils/secure_storage.dart';
 import 'package:sharp_parking_app/widgets/toasts/warning_toast.dart';
  
 class UserServices {
   Dio dio = new Dio();
   String url = 'http://10.0.2.2:3000';
 
-  Future<Response> register(firstName, lastName, email, password) async {
+  Future<Response> register(firstName, lastName, email, password, carId) async {
     try {
       final response =  await dio.post(url + '/register/user', data: {
         "firstName": firstName,
         "lastName": lastName,
         "email": email,
-        "password": password
+        "password": password,
+        "cars": carId
       }, options: Options(contentType: Headers.formUrlEncodedContentType));
       return response;
     }
@@ -35,6 +42,19 @@ class UserServices {
     }
   }
 
+  static void logout(context) async {
+    try {
+      var res = await SecureStorage.deleteAllSecureData();
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (BuildContext context) => Login()), 
+          (Route<dynamic> route) => false);
+    } catch (err) {
+      var warning = WarningToast(err.response.data['msg']);
+      warning.showToast();
+    }
+  }
+
   getAllUsers() async {
     // make GET request
     try{
@@ -44,5 +64,9 @@ class UserServices {
       var warning = WarningToast(err.response.statusMessage);
       warning.showToast();
     }
+  }
+
+  Future<User> tokenToUser() async {
+    return User.fromJson(Jwt.parseJwt(await SecureStorage.readSecureData('token')));
   }
 }

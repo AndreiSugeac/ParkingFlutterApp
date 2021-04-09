@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:jwt_decode/jwt_decode.dart';
-import 'package:sharp_parking_app/DTO/User.dart';
-import 'package:sharp_parking_app/utils/secure_storage.dart';
+import 'package:sharp_parking_app/screen/user.dart';
 import 'package:sharp_parking_app/widgets/buttons/home_screen_button.dart';
 import 'package:sharp_parking_app/utils/colors.dart';
 import 'package:sharp_parking_app/widgets/icons/location_icon.dart';
 import 'package:sharp_parking_app/widgets/icons/parking_block_icon.dart';
 import 'package:sharp_parking_app/screen/parking_finder.dart';
 import 'package:sharp_parking_app/services/user_services.dart';
+import 'package:sharp_parking_app/widgets/loaders/page_loader.dart';
 
 class Home extends StatefulWidget {
 
@@ -16,15 +15,11 @@ class Home extends StatefulWidget {
 
 class _Home extends State<Home> {
 
-  Future<User> tokenToUser() async {
-    return User.fromJson(Jwt.parseJwt(await SecureStorage.readSecureData('token')));
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return FutureBuilder(
-      future: tokenToUser(),
+      future: UserServices().tokenToUser(),
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
@@ -32,45 +27,53 @@ class _Home extends State<Home> {
               body: Column(
                 children: <Widget>[
                   SizedBox(height: 0.07 * size.height),
-                  Container(
-                    alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),//or 15.0
-                          child: Container(
-                            height: 60.0,
-                            width: 60.0,
-                            color: primaryColor,
-                            child: Icon(Icons.person, color: Colors.white, size: 40.0),
-                            alignment: Alignment.center,
+                  TextButton(
+                    onPressed: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UserScreen()),
+                      )
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20.0),//or 15.0
+                            child: Container(
+                              height: 60.0,
+                              width: 60.0,
+                              color: primaryColor,
+                              child: Icon(Icons.person, color: Colors.white, size: 40.0),
+                              alignment: Alignment.center,
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                snapshot.data.firstName + ' ' + snapshot.data.lastName,
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  snapshot.data.firstName + ' ' + snapshot.data.lastName,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                'Str. Maria Rosetti, nr. 43',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Color.fromRGBO(112, 112, 112, 1),
+                                Text(
+                                  snapshot.data.email,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color.fromRGBO(112, 112, 112, 1),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(height: 0.1 * size.height),
@@ -155,7 +158,7 @@ class _Home extends State<Home> {
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                                   child: Text(
-                                    'Select your preferred parking spot near your destination. The parking sports are available in a time interval set by the owner, so you can access any spot, as long as you fit that interval.',
+                                    'Select your preferred parking spot near your destination. The parking spots are available in a time interval set by the owner, so you can access any spot, as long as you fit that interval.',
                                     textAlign: TextAlign.center,
                                     textDirection: TextDirection.ltr,
                                     style: TextStyle(color: greyColor),
@@ -173,9 +176,7 @@ class _Home extends State<Home> {
             )
           );
         } else {
-          return CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color> (primaryColor),
-          );
+          return PageLoader();
         }
       }
     );

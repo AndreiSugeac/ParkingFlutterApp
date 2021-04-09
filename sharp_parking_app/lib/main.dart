@@ -33,14 +33,23 @@ class SharpApp extends StatelessWidget {
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             theme: ThemeData(fontFamily: 'Roboto'),
             home: Scaffold(
               body: snapshot.data == true ? Home() : WelcomeScreen(),
             )
           );
         } else {
-          return CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color> (primaryColor),
+          return MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 5.0,
+                  backgroundColor: Colors.purpleAccent.shade100,
+                  valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+                )
+              )
+            )
           );
         }
       }

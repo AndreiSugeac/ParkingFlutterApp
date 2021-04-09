@@ -5,7 +5,7 @@ const config = require('../config/dbConfig');
 
 var services = {
 
-    getUser: (req, res) => {
+    verifyUser: (req, res) => {
         if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
             const tkn = req.headers.authorization.split(' ')[1];
             const decoded = jwt.decode(tkn, config.secret);
@@ -25,35 +25,43 @@ var services = {
     // Creating a new User entity in the DB
     addNewUser: (req, res) => {
         // Checking to see if the all the required fields have been entered
-        if((!req.body.firstName) || (!req.body.lastName) || (!req.body.email) || (!req.body.password)) {
+        if((!req.body.firstName) || (!req.body.lastName) || (!req.body.email) || (!req.body.password) || (!req.body.cars)) {
             res.json({
                 success: false,
                 msg: 'All mandatory fields must be completed!'
             });
         }
         else {
-            var newUser = User({
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                email: req.body.email,
-                password: req.body.password
-            });
+            // if(User.findOne({ email: req.body.email}) || User.findOne({ firstName: req.body.firstName, lastName: req.body.lastName})) {
+            //     res.json({
+            //         success: false,
+            //         msg: 'There is already one user with this cridentials!'
+            //     });
+            // } else {
+                var newUser = User({
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    email: req.body.email,
+                    cars: req.body.cars,
+                    password: req.body.password
+                });
 
-            newUser.save((err, newUser) => {
-                if(err) {
-                    res.json({
-                        success: false,
-                        msg: 'The new user could not be saved!'
-                    });
-                    console.log(err);
-                }
-                else {
-                    res.json({
-                        success: true,
-                        msg: 'New user has been successfully saved!'
-                    });
-                }
-            });
+                newUser.save((err, newUser) => {
+                    if(err) {
+                        res.json({
+                            success: false,
+                            msg: 'The new user could not be saved!'
+                        });
+                        console.log(err);
+                    }
+                    else {
+                        res.json({
+                            success: true,
+                            msg: 'New user has been successfully saved!'
+                        });
+                    }
+                });
+            
         }
     },
 
