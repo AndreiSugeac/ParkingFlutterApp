@@ -141,9 +141,10 @@ class _Login extends State<Login> {
                 onPressed: () async {
                   token = await authentication();
                   if(token != null) {
-                    Navigator.push(
+                    Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(builder: (BuildContext context) => Home()),
+                      ModalRoute.withName('/'),
                     );
                   }
                 },
