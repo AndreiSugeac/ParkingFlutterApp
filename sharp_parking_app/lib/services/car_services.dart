@@ -3,7 +3,8 @@ import 'package:sharp_parking_app/widgets/toasts/warning_toast.dart';
 
 class CarServices {
   Dio dio = new Dio();
-  String url = 'http://10.0.2.2:3000';
+  //String url = 'http://10.0.2.2:3000';
+  String url = 'http://192.168.1.11:3000';
 
   insertCar(brand, model, licensePlate, color) async {
     try {

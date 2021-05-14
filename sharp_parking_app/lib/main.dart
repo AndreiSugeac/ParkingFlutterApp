@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:sharp_parking_app/screen/home.dart';
 import 'package:sharp_parking_app/utils/colors.dart';
@@ -28,6 +29,12 @@ class SharpApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light
+    )); 
+
     return FutureBuilder<bool> (
       future: userLogedIn(),
       builder: (context, snapshot) {
