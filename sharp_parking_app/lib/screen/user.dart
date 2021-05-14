@@ -131,7 +131,7 @@ class _UserScreenState extends State<UserScreen> {
                       Row(
                         children: <Widget>[
                           Container(
-                            height: size.height * 0.06,
+                            height: size.height * 0.08,
                             width: size.width,
                             child: TextButton(
                               style: TextButton.styleFrom(
@@ -211,7 +211,7 @@ class _UserScreenState extends State<UserScreen> {
                       Row(
                         children: <Widget>[
                           Container(
-                            height: size.height * 0.06,
+                            height: size.height * 0.08,
                             width: size.width,
                             child: TextButton(
                               style: TextButton.styleFrom(
@@ -287,7 +287,7 @@ class _UserScreenState extends State<UserScreen> {
                       Row(
                         children: <Widget>[
                           Container(
-                            height: size.height * 0.06,
+                            height: size.height * 0.08,
                             width: size.width,
                             child: TextButton(
                               style: TextButton.styleFrom(
@@ -383,7 +383,7 @@ class _UserScreenState extends State<UserScreen> {
                       Row(
                         children: <Widget>[
                           Container(
-                            height: size.height * 0.06,
+                            height: size.height * 0.08,
                             width: size.width,
                             child: TextButton(
                               style: TextButton.styleFrom(

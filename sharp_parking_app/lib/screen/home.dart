@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:sharp_parking_app/screen/parking_block.dart';
 import 'package:sharp_parking_app/screen/user.dart';
 import 'package:sharp_parking_app/widgets/buttons/home_screen_button.dart';
 import 'package:sharp_parking_app/utils/colors.dart';
@@ -17,6 +19,11 @@ class _Home extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light
+    )); 
     Size size = MediaQuery.of(context).size;
     return FutureBuilder(
       future: UserServices().tokenToUser(),
@@ -103,7 +110,7 @@ class _Home extends State<Home> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        HomeScreenBtn(ParkingBlockIcon(), UserServices().getAllUsers),
+                        HomeScreenBtn(ParkingBlockIcon(), ParkingBlock()),
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
