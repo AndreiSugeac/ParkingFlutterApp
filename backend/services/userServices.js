@@ -105,7 +105,35 @@ var services = {
                 }
             });
         }
-    }, 
+    },
+
+    addParkingSpotForUser: async (req, res) => {
+        if(req.body.idUser && req.body.idParkingSpot) {
+            const filter = { _id: req.body.idUser };
+            const update = { parkingSpot: req.body.idParkingSpot};
+            
+            await User.findOneAndUpdate(filter, update, callback= (err) => {
+                if(err) {
+                    res.json({
+                        success: false,
+                        msg: 'An error occured while updating your parking spot!'
+                    });
+                }
+                else {
+                    res.json({
+                        success: true,
+                        msg: 'Parking spot was added to your user account!'
+                    });
+                }
+            });
+        }
+        else {
+            res.json({
+                success: false,
+                msg: 'The ids must not be null!'
+            });
+        }
+    }
 
     
 }

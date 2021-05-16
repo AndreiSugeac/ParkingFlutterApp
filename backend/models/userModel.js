@@ -23,7 +23,11 @@ const userSchema = new Schema({
     cars: [{
         type: Schema.Types.Number,
         ref: 'Car'
-    }]
+    }],
+    parkingSpot: {
+        type: Schema.Types.ObjectId,
+        ref: 'ParkingSpot'
+    }
 });
 
 // This function will hash the password for all new users and for past users that are modifying it
