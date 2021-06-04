@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sharp_parking_app/screen/create_parking_spot.dart';
 import 'package:sharp_parking_app/screen/parking_block.dart';
 import 'package:sharp_parking_app/screen/user.dart';
 import 'package:sharp_parking_app/widgets/buttons/home_screen_button.dart';
@@ -83,7 +84,7 @@ class _Home extends State<Home> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 0.1 * size.height),
+                  SizedBox(height: 0.08 * size.height),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -104,13 +105,13 @@ class _Home extends State<Home> {
                       )
                     ],
                   ),
-                  SizedBox(height: 0.03 * size.height),
+                  SizedBox(height: 0.02 * size.height),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 50, 20, 0),
-                    child: Row(
+                    child: snapshot.data.parkingSpotId != null ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        HomeScreenBtn(ParkingBlockIcon(), ParkingBlock()),
+                        HomeScreenBtn(ParkingBlockIcon(), ParkingBlock(snapshot.data)),
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
@@ -118,7 +119,7 @@ class _Home extends State<Home> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  'Parking block',
+                                  'Parking spot',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 22,
@@ -139,9 +140,41 @@ class _Home extends State<Home> {
                           ),
                         ),
                       ],
+                    ) : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        HomeScreenBtn(ParkingBlockIcon(), CreateParkingSpot(snapshot.data.id)),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Set your parking',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 22,
+                                  ),
+                                ),
+                                SizedBox(height: 0.01 * size.height),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                  child: Text(
+                                    'You don\'t have a parking spot assigned to your account. Create one and share it with our community. Your spot will be secured with the help of our smart parking blocks.',
+                                    textAlign: TextAlign.center,
+                                    textDirection: TextDirection.ltr,
+                                    style: TextStyle(color: greyColor),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: size.height * 0.03,),
+                  SizedBox(height: size.height * 0.02,),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 50, 20, 0),
                     child: Row(

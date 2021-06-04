@@ -3,15 +3,16 @@ const jwt = require('jwt-simple');
 const ParkingSpot = require('../models/parkingSpotModel');
 const User = require('../models/userModel');
 const config = require('../config/dbConfig');
+const { json } = require('body-parser');
 
 var services = {
 
     addParkingSpot: (req, res) => {
-        if(!req.body.location.latitude || 
-           !req.body.location.longitude ||
-           !req.body.parkingBlock.macAddress ||
-           !req.body.parkingBlock.serviceUUID ||
-           !req.body.parkingBlock.characteristicUUID) {
+        if(!req.body.latitude || 
+           !req.body.longitude ||
+           !req.body.macAddress ||
+           !req.body.serviceUUID ||
+           !req.body.characteristicUUID) {
 
             res.json({
                 success: false,
@@ -21,13 +22,13 @@ var services = {
         else {
             var newParkingSpot = ParkingSpot({
                 location: {
-                    latitude: req.body.location.latitude,
-                    longitude: req.body.location.longitude
+                    latitude: parseFloat(req.body.latitude),
+                    longitude: parseFloat(req.body.longitude)
                 },
                 parkingBlock: {
-                    macAddress: req.body.parkingBlock.macAddress,
-                    serviceUUID: req.body.parkingBlock.serviceUUID,
-                    characteristicUUID: req.body.parkingBlock.characteristicUUID
+                    macAddress: req.body.macAddress,
+                    serviceUUID: req.body.serviceUUID,
+                    characteristicUUID: req.body.characteristicUUID
                 },
                 available: req.body.available != null ? req.body.available : true 
             });
@@ -43,11 +44,30 @@ var services = {
                     res.json({
                         success: true,
                         msg: 'Your parking spot has been successfully saved!',
-                        id: newParking._id
+                        spot: newParking
                     });
                 }
             });
         }
+    },
+
+    getAvailableParkingSpots: (req, res) => {
+        ParkingSpot.find({'available': true}, (err, docs) => {
+            if(err) {
+                res.json({
+                    success: false,
+                    msg: 'An error occurred while trying to get all available parking spots!'
+                });
+                throw err;
+            }
+            else {
+                res.json({
+                    success: true,
+                    msg: 'Successfully retrieved all available parking spots.',
+                    parkingSpots: docs
+                })
+            }
+        });
     },
 
     getParkingSpotById: (req, res) => {

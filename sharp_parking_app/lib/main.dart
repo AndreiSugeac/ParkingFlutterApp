@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:sharp_parking_app/screen/home.dart';
-import 'package:sharp_parking_app/utils/colors.dart';
 import 'package:sharp_parking_app/utils/secure_storage.dart';
+import 'package:sharp_parking_app/widgets/loaders/page_loader.dart';
 import './screen/welcome.dart';
 
 void main() => runApp(SharpApp());
@@ -47,17 +47,7 @@ class SharpApp extends StatelessWidget {
             )
           );
         } else {
-          return MaterialApp(
-            home: Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 5.0,
-                  backgroundColor: Colors.purpleAccent.shade100,
-                  valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
-                )
-              )
-            )
-          );
+          return PageLoader();
         }
       }
     );

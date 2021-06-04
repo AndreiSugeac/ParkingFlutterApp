@@ -6,13 +6,15 @@ class User {
   String lastName;
   String email;
   Object cars;
+  String parkingSpotId;
 
   User({
     @required this.id, 
     @required this.firstName, 
     @required this.lastName, 
     @required this.email,
-    @required this.cars
+    @required this.cars,
+    this.parkingSpotId
   });
 
   factory User.fromJson(Map<String, dynamic> json) => new User(
@@ -20,7 +22,8 @@ class User {
         firstName: json["firstName"] == null ? null : json["firstName"],
         lastName: json["lastName"] == null ? null : json["lastName"],
         email: json["email"] == null ? null : json["email"],
-        cars: json["cars"] == null ? null : json["cars"]
+        cars: json["cars"] == null ? null : json["cars"],
+        parkingSpotId: json["parkingSpot"] == null ? null : json["parkingSpot"]
     );
 
     Map<String, dynamic> toJson() => {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sharp_parking_app/screen/signup.dart';
 import 'package:sharp_parking_app/utils/secure_storage.dart';
+import 'package:sharp_parking_app/widgets/buttons/transparent_button.dart';
 
 import 'package:sharp_parking_app/widgets/icons/sharp_icon.dart';
 import 'package:sharp_parking_app/utils/colors.dart';
@@ -144,7 +146,8 @@ class _Login extends State<Login> {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (BuildContext context) => Home()),
-                      ModalRoute.withName('/'),
+                      //ModalRoute.withName('/'),
+                      (Route<dynamic> route) => false
                     );
                   }
                 },
@@ -155,6 +158,24 @@ class _Login extends State<Login> {
                 ),
                 style: loginBtnStyle,
               ),
+            ),
+            Container(
+              width: 0.75 * size.width,
+              height: 0.06 * size.height,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignUp()),
+                );
+                }, 
+                child: Text(
+                  'New user? Register', 
+                  style: TextStyle(
+                    color: secondaryColor
+                  ),
+                ),
+              )
             ),
           ],
         ),

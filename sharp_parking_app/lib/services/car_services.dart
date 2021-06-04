@@ -4,8 +4,8 @@ import 'package:sharp_parking_app/widgets/toasts/warning_toast.dart';
 class CarServices {
   Dio dio = new Dio();
   //String url = 'http://10.0.2.2:3000';
-  // String url = 'http://192.168.1.11:3000'; // contine ip adress ul de acasa de la Stupini
-  String url = 'http://192.168.0.107:3000'; // contine ip adress ul de la Rosetti
+  String url = 'http://192.168.1.12:3000'; // contine ip adress ul de acasa de la Stupini
+  // String url = 'http://192.168.0.107:3000'; // contine ip adress ul de la Rosetti
 
   insertCar(brand, model, licensePlate, color) async {
     try {

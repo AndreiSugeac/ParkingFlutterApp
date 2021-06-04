@@ -86,8 +86,8 @@ var services = {
                             msg: 'Authentication failed because user could not be found!'
                         });
                     } else {
-                        user.comparePass(req.body.password, (err, matching) => {
-                            if(matching && !err) {
+                        user.comparePass(req.body.password, (err, match) => {
+                            if(match && !err) {
                                 const tkn = jwt.encode(user, config.secret);
                                 res.json({
                                     success: true,
@@ -108,9 +108,9 @@ var services = {
     },
 
     addParkingSpotForUser: async (req, res) => {
-        if(req.body.idUser && req.body.idParkingSpot) {
-            const filter = { _id: req.body.idUser };
-            const update = { parkingSpot: req.body.idParkingSpot};
+        if(req.params.idUser && req.params.idParkingSpot) {
+            const filter = { _id: req.params.idUser };
+            const update = { parkingSpot: req.params.idParkingSpot};
             
             await User.findOneAndUpdate(filter, update, callback= (err) => {
                 if(err) {

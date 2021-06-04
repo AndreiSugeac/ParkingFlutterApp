@@ -51,6 +51,8 @@ dependencies:
 
   flutter_ble_lib: ^2.3.2
 
+  location: ^3.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
