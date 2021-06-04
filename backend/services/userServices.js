@@ -86,8 +86,8 @@ var services = {
                             msg: 'Authentication failed because user could not be found!'
                         });
                     } else {
-                        user.comparePass(req.body.password, (err, matching) => {
-                            if(matching && !err) {
+                        user.comparePass(req.body.password, (err, match) => {
+                            if(match && !err) {
                                 const tkn = jwt.encode(user, config.secret);
                                 res.json({
                                     success: true,
@@ -105,7 +105,35 @@ var services = {
                 }
             });
         }
-    }, 
+    },
+
+    addParkingSpotForUser: async (req, res) => {
+        if(req.params.idUser && req.params.idParkingSpot) {
+            const filter = { _id: req.params.idUser };
+            const update = { parkingSpot: req.params.idParkingSpot};
+            
+            await User.findOneAndUpdate(filter, update, callback= (err) => {
+                if(err) {
+                    res.json({
+                        success: false,
+                        msg: 'An error occured while updating your parking spot!'
+                    });
+                }
+                else {
+                    res.json({
+                        success: true,
+                        msg: 'Parking spot was added to your user account!'
+                    });
+                }
+            });
+        }
+        else {
+            res.json({
+                success: false,
+                msg: 'The ids must not be null!'
+            });
+        }
+    }
 
     
 }
