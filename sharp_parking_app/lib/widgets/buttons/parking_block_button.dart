@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:sharp_parking_app/utils/colors.dart';
 
 class ParkingBlockButton extends StatelessWidget {
+  final String parkingSpotId;
+  final bool available;
   final Widget _btnIcon;
   final dynamic _btnAction;
   final bool _isEnabled;
+  final Color color;
 
-  ParkingBlockButton(this._btnIcon, this._btnAction, this._isEnabled);
+  ParkingBlockButton(this.parkingSpotId, this.available, this._btnIcon, this._btnAction, this._isEnabled, this.color);
 
   // Button styles
   final ButtonStyle raisedBtnStyle = ElevatedButton.styleFrom(
@@ -24,18 +27,12 @@ class ParkingBlockButton extends StatelessWidget {
       height: 0.14 * size.height,
       child: ElevatedButton(
         onPressed: _isEnabled ? () => {
-          _btnAction()
+          _btnAction(this.parkingSpotId, this.available)
         } : () => {},
         style: raisedBtnStyle,
         child: Ink(
           decoration: BoxDecoration(
-            gradient: _isEnabled ? LinearGradient(colors: [primaryColor, secondaryGradientColor],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ) : LinearGradient(colors: [Colors.grey.shade300, Colors.grey.shade500],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+            color: this.color,
             borderRadius: BorderRadius.circular(20)
           ),
           child: _btnIcon,

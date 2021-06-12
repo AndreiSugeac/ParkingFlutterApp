@@ -27,6 +27,11 @@ Router.post('/authenticate/user', userServices.authUser);
 // @desc Route for adding a existing parking spot to a user account
 Router.put('/update/user/parkingSpot/:idUser/:idParkingSpot', userServices.addParkingSpotForUser);
 
+// @desc Set schedule for parking spot
+Router.put('/update/parkingSpot/schedule', parkingSpotServices.setSchedule);
+
+// @desc Update property available of parking spot
+Router.put('/update/available/parkingSpot', parkingSpotServices.updateParkingSpotAvailability);
 
 // Car routes
 
@@ -49,7 +54,7 @@ Router.get('/parkingSpot/get/:id', parkingSpotServices.getParkingSpotById);
 Router.get('/parkingSpot/get/byUser/:id', parkingSpotServices.getParkingSpotByUserId);
 
 // @desc Route for getting all available parking spots
-Router.get('/parkingSpot/get/available', parkingSpotServices.getAvailableParkingSpots); 
+Router.get('/parkingSpot/available/get', parkingSpotServices.getAvailableParkingSpots); 
 
 // POST REQUESTS
 // @desc Route for inserting new parking spots

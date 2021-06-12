@@ -4,12 +4,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sharp_parking_app/DTO/User.dart';
+import 'package:sharp_parking_app/screen/scheduler.dart';
 // import 'package:flutter_blue/gen/flutterblue.pb.dart';
 // import 'package:sharp_parking_app/services/ble_services.dart';
 // import 'package:sharp_parking_app/services/bluetooth_services.dart';
 // import 'package:sharp_parking_app/services/bluetooth_services.dart';
-import 'package:sharp_parking_app/services/parkingSpotServices.dart';
+import 'package:sharp_parking_app/services/parking_spot_services.dart';
 import 'package:sharp_parking_app/utils/colors.dart';
 import 'package:sharp_parking_app/widgets/buttons/parking_block_button.dart';
 import 'package:sharp_parking_app/widgets/icons/available_parking.dart';
@@ -97,10 +99,11 @@ class _ParkingBlockState extends State<ParkingBlock> {
     scanSubscription.cancel();
   }
 
-  void lowerParkingBlock() async {
+  void lowerParkingBlock(parkingSpotId, available) async {
     if(_communicationCharacteristic != null) {
       try {
         await _communicationCharacteristic.write(utf8.encode('1' + '\r\n'));
+        final changeAvailability = await ParkingSpotServices().updateAvailability(parkingSpotId, available);
       } on Exception catch(err) {
         print(err);
         return;
@@ -113,10 +116,11 @@ class _ParkingBlockState extends State<ParkingBlock> {
     }
   }
 
-  void raiseParkingBlock() async {
+  void raiseParkingBlock(parkingSpotId, available) async {
     if(_communicationCharacteristic != null) {
       try {
         await _communicationCharacteristic.write(utf8.encode('0' + '\r\n'));
+        final changeAvailability = await ParkingSpotServices().updateAvailability(parkingSpotId, available);
       } on Exception catch(err) {
         print(err);
         return;
@@ -287,7 +291,6 @@ class _ParkingBlockState extends State<ParkingBlock> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: _connected && _lowered ? () => {
-                        raiseParkingBlock()
                       } : () => {
                       },
                     ),
@@ -302,7 +305,6 @@ class _ParkingBlockState extends State<ParkingBlock> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: _connected && _raised ? () => {
-                        lowerParkingBlock()
                       } : () => {
                       },
                     ),
@@ -401,7 +403,12 @@ class _ParkingBlockState extends State<ParkingBlock> {
                       height: 200.0,
                       width: 200.0,
                       color: Colors.white,
-                      child: Icon(Icons.local_parking, color: Colors.black87, size: 100,),
+                      child: Container(
+                        width: 0.25 * size.height,
+                        height: 0.25 * size.height,
+                        child: SvgPicture.asset('assets/icons/parked-car.svg'),
+                        alignment: Alignment.center,
+                      ),
                       alignment: Alignment.center,
                     ),
                   ),
@@ -421,26 +428,33 @@ class _ParkingBlockState extends State<ParkingBlock> {
                     height: 60,
                     width: 250,
                     alignment: Alignment.center,
-                    child:ElevatedButton(
+                    child: _connected ? ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.blue
+                        primary: primaryColor
                       ),
-                      child: _connected ? Text(
+                      child: Text(
                         'Disconnect',
                         style: TextStyle(color: Colors.white),
-                      ) : Text(
-                        'Connect',
-                        style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: !_connected ? () async => {
+                      onPressed: () => {
+                        _disconnectDevice()
+                      },
+                    ) : 
+                    ElevatedButton(
+                      onPressed: () async => {
                         _bleDevice = devicesList.firstWhere((device) => device.id == DeviceIdentifier(snapshot.data.data['parkingSpot']['parkingBlock']['macAddress'])), // DeviceIdentifier("00:13:AA:00:B5:96")
                         await _connectToDevice(),
                         await _getServices(snapshot.data.data['parkingSpot']['parkingBlock']['serviceUUID']),
                         _getCharacteristics(snapshot.data.data['parkingSpot']['parkingBlock']['characteristicUUID'])
-                      } : () => {
-                        _disconnectDevice()
-                      },
-                    )
+                      }, 
+                      child: Text(
+                        'Connect',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: secondaryColor
+                      ),
+                    ),
                   ),
                   SizedBox(height: size.height * 0.01),
                   Row(
@@ -452,12 +466,12 @@ class _ParkingBlockState extends State<ParkingBlock> {
                           Text(
                             'Access',
                             style: TextStyle(
-                              color: primaryColor,
+                              color: _connected ? secondaryColor : Colors.grey.shade500,
                               fontSize: 17
                             ),
                           ),
                           SizedBox(height: size.height * 0.02),
-                          ParkingBlockButton(AvailableParkingIcon(), lowerParkingBlock, _bleDevice != null ? (_connected && _raised) : false),
+                          ParkingBlockButton(snapshot.data.data['parkingSpot']['_id'], false, AvailableParkingIcon(), lowerParkingBlock, _bleDevice != null ? (_connected && _raised) : false, _connected ? secondaryColor : Colors.grey.shade500),
                         ],
                       ),
                       SizedBox(width: size.width * 0.1),
@@ -466,15 +480,35 @@ class _ParkingBlockState extends State<ParkingBlock> {
                           Text(
                             'Block',
                             style: TextStyle(
-                              color: Colors.grey.shade500,
+                              color: _connected ? pinkColor : Colors.grey.shade500,
                               fontSize: 17
                             ),
                           ),
                           SizedBox(height: size.height * 0.02),
-                          ParkingBlockButton(RaisedBlockIcon(), raiseParkingBlock, _bleDevice != null ? (_connected && _lowered) : false)
+                          ParkingBlockButton(snapshot.data.data['parkingSpot']['_id'], true, RaisedBlockIcon(), raiseParkingBlock, _bleDevice != null ? (_connected && _lowered) : false, _connected ? pinkColor : Colors.grey.shade500)
                         ],
                       )
                     ],
+                  ),
+                  SizedBox(height: size.height * 0.1),
+                  Container(
+                    width: 250,
+                    height: 60,
+                    alignment: Alignment.center,
+                    child: TextButton(
+                      onPressed: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Scheduler(snapshot.data.data['parkingSpot'].containsKey('schedule')? snapshot.data.data['parkingSpot']['schedule'] : null, snapshot.data.data['parkingSpot']['_id'])),
+                        )
+                      },
+                      child: Text(
+                        'SCHEDULER',
+                        style: TextStyle(
+                          color: Colors.grey.shade500
+                        ),
+                      ),
+                    )
                   )
                 ],
               )

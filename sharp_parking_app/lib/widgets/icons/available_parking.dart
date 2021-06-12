@@ -6,7 +6,7 @@ class AvailableParkingIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return 
       Container(
-          child: SvgPicture.asset('assets/icons/ParkedCar.svg'),
+          child: SvgPicture.asset('assets/icons/AvailableParking.svg'),
           alignment: Alignment.center,
     );
   }

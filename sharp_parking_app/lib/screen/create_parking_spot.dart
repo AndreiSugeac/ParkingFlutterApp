@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:sharp_parking_app/screen/home.dart';
-import 'package:sharp_parking_app/services/parkingSpotServices.dart';
+import 'package:sharp_parking_app/services/parking_spot_services.dart';
 import 'package:sharp_parking_app/services/user_services.dart';
 import 'package:sharp_parking_app/utils/colors.dart';
 import 'package:sharp_parking_app/widgets/buttons/long_button.dart';

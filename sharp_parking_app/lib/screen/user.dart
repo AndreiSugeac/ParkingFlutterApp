@@ -206,158 +206,158 @@ class _UserScreenState extends State<UserScreen> {
                       )
                     ],
                   ),
-                  Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            height: size.height * 0.08,
-                            width: size.width,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                enableFeedback: false,
-                              ),
-                              onPressed: () => {
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.only(left: 20),
-                                        child:Icon(
-                                          Icons.favorite_border_sharp, 
-                                          color: Colors.black87, 
-                                          size: 25
-                                        ),
-                                      )
+                  // Column(
+                  //   children: <Widget>[
+                  //     Row(
+                  //       children: <Widget>[
+                  //         Container(
+                  //           height: size.height * 0.08,
+                  //           width: size.width,
+                  //           child: TextButton(
+                  //             style: TextButton.styleFrom(
+                  //               enableFeedback: false,
+                  //             ),
+                  //             onPressed: () => {
+                  //             },
+                  //             child: Row(
+                  //               mainAxisAlignment: MainAxisAlignment.start,
+                  //               crossAxisAlignment: CrossAxisAlignment.center,
+                  //               children: <Widget>[
+                  //                 Column(
+                  //                   crossAxisAlignment: CrossAxisAlignment.start,
+                  //                   mainAxisAlignment: MainAxisAlignment.center,
+                  //                   children: <Widget>[
+                  //                     Container(
+                  //                       padding: EdgeInsets.only(left: 20),
+                  //                       child:Icon(
+                  //                         Icons.favorite_border_sharp, 
+                  //                         color: Colors.black87, 
+                  //                         size: 25
+                  //                       ),
+                  //                     )
                                       
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 20
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'Favourites',
-                                          textAlign:TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black87
-                                          )
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Spacer(),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.only(right: 20),
-                                        child: Icon(
-                                          Icons.arrow_forward_ios_outlined, 
-                                          color: Colors.black87, 
-                                          size: 20
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              )
-                            )
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            height: size.height * 0.08,
-                            width: size.width,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                enableFeedback: false,
-                              ),
-                              onPressed: () => {
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.only(left: 20),
-                                        child:Icon(
-                                          Icons.history, 
-                                          color: Colors.black87, 
-                                          size: 25
-                                        ),
-                                      )
+                  //                   ],
+                  //                 ),
+                  //                 SizedBox(
+                  //                   width: 20
+                  //                 ),
+                  //                 Column(
+                  //                   crossAxisAlignment: CrossAxisAlignment.start,
+                  //                   mainAxisAlignment: MainAxisAlignment.center,
+                  //                   children: <Widget>[
+                  //                     Container(
+                  //                       alignment: Alignment.centerLeft,
+                  //                       child: Text(
+                  //                         'Favourites',
+                  //                         textAlign:TextAlign.center,
+                  //                         style: TextStyle(
+                  //                           fontSize: 18,
+                  //                           fontWeight: FontWeight.w500,
+                  //                           color: Colors.black87
+                  //                         )
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //                 Spacer(),
+                  //                 Column(
+                  //                   crossAxisAlignment: CrossAxisAlignment.end,
+                  //                   mainAxisAlignment: MainAxisAlignment.center,
+                  //                   children: <Widget>[
+                  //                     Container(
+                  //                       padding: EdgeInsets.only(right: 20),
+                  //                       child: Icon(
+                  //                         Icons.arrow_forward_ios_outlined, 
+                  //                         color: Colors.black87, 
+                  //                         size: 20
+                  //                       ),
+                  //                     )
+                  //                   ],
+                  //                 )
+                  //               ],
+                  //             )
+                  //           )
+                  //         ),
+                  //       ],
+                  //     )
+                  //   ],
+                  // ),
+                  // Column(
+                  //   children: <Widget>[
+                  //     Row(
+                  //       children: <Widget>[
+                  //         Container(
+                  //           height: size.height * 0.08,
+                  //           width: size.width,
+                  //           child: TextButton(
+                  //             style: TextButton.styleFrom(
+                  //               enableFeedback: false,
+                  //             ),
+                  //             onPressed: () => {
+                  //             },
+                  //             child: Row(
+                  //               mainAxisAlignment: MainAxisAlignment.start,
+                  //               crossAxisAlignment: CrossAxisAlignment.center,
+                  //               children: <Widget>[
+                  //                 Column(
+                  //                   crossAxisAlignment: CrossAxisAlignment.start,
+                  //                   mainAxisAlignment: MainAxisAlignment.center,
+                  //                   children: <Widget>[
+                  //                     Container(
+                  //                       padding: EdgeInsets.only(left: 20),
+                  //                       child:Icon(
+                  //                         Icons.history, 
+                  //                         color: Colors.black87, 
+                  //                         size: 25
+                  //                       ),
+                  //                     )
                                       
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 20
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'Previous parkings',
-                                          textAlign:TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black87
-                                          )
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Spacer(),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.only(right: 20),
-                                        child: Icon(
-                                          Icons.arrow_forward_ios_outlined, 
-                                          color: Colors.black87, 
-                                          size: 20
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              )
-                            )
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+                  //                   ],
+                  //                 ),
+                  //                 SizedBox(
+                  //                   width: 20
+                  //                 ),
+                  //                 Column(
+                  //                   crossAxisAlignment: CrossAxisAlignment.start,
+                  //                   mainAxisAlignment: MainAxisAlignment.center,
+                  //                   children: <Widget>[
+                  //                     Container(
+                  //                       alignment: Alignment.centerLeft,
+                  //                       child: Text(
+                  //                         'Previous parkings',
+                  //                         textAlign:TextAlign.center,
+                  //                         style: TextStyle(
+                  //                           fontSize: 18,
+                  //                           fontWeight: FontWeight.w500,
+                  //                           color: Colors.black87
+                  //                         )
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //                 Spacer(),
+                  //                 Column(
+                  //                   crossAxisAlignment: CrossAxisAlignment.end,
+                  //                   mainAxisAlignment: MainAxisAlignment.center,
+                  //                   children: <Widget>[
+                  //                     Container(
+                  //                       padding: EdgeInsets.only(right: 20),
+                  //                       child: Icon(
+                  //                         Icons.arrow_forward_ios_outlined, 
+                  //                         color: Colors.black87, 
+                  //                         size: 20
+                  //                       ),
+                  //                     )
+                  //                   ],
+                  //                 )
+                  //               ],
+                  //             )
+                  //           )
+                  //         ),
+                  //       ],
+                  //     )
+                  //   ],
+                  // ),
                   SizedBox(height: size.height * 0.01),
                   Container(
                     padding: EdgeInsets.only(left: 30),

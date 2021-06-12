@@ -6,7 +6,7 @@ class RaisedBlockIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return 
       Container(
-          child: SvgPicture.asset('assets/icons/RaisedParkingBlock.svg'),
+          child: SvgPicture.asset('assets/icons/BlockParking.svg'),
           alignment: Alignment.center,
     );
   }

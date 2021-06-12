@@ -19,9 +19,18 @@ const parkingBlockSchema = new Schema({
     characteristicUUID: String
 });
 
+const scheduleSchema = new Schema({
+    startDate: String,
+    startTime: String,
+    endTime: String,
+    endDate: String,
+    isActive: Boolean
+});
+
 const parkingSpotSchema = new Schema({
     location: locationSchema,
     parkingBlock: parkingBlockSchema,
+    schedule: scheduleSchema,
     available: Boolean
 });
 

@@ -52,7 +52,7 @@ var services = {
     },
 
     getAvailableParkingSpots: (req, res) => {
-        ParkingSpot.find({'available': true}, (err, docs) => {
+        ParkingSpot.find({'available': true, 'schedule.isActive': true}, (err, docs) => {
             if(err) {
                 res.json({
                     success: false,
@@ -65,7 +65,7 @@ var services = {
                     success: true,
                     msg: 'Successfully retrieved all available parking spots.',
                     parkingSpots: docs
-                })
+                });
             }
         });
     },
@@ -153,6 +153,88 @@ var services = {
                 success: false,
                 msg: 'The id of the user must not be null!'
             })
+        }
+    },
+
+    updateParkingSpotAvailability: (req, res) => {
+        if(!req.body.parkingSpotId || req.body.available == null) {
+            res.json({
+                success: false,
+                msg: 'Missing required information about the availability'
+            });
+        } else {
+            ParkingSpot.findByIdAndUpdate(
+                req.body.parkingSpotId,
+                {
+                    available: req.body.available
+                },
+                function (err, result) {
+                    if(err) {
+                        res.json({
+                            success: false,
+                            msg: 'Could not change property available of parking spot!'
+                        });
+                    } else {
+                        if(result) {
+                            res.json({
+                                success: true,
+                                msg: 'Property available successfully updated for parking spot!',
+                                parkingSpot: result
+                            });
+                        }
+                        else {
+                            res.json({
+                                success: false,
+                                msg: 'Querry returned null!',
+                            });
+                        }
+                    }
+                }
+            );
+        }
+    },
+
+    setSchedule: (req, res) => {
+        if(!req.body.parkingSpotId || !req.body.startDate || !req.body.startTime || !req.body.endTime || !req.body.endDate || !req.body.isActive) {
+            res.json({
+                success: false,
+                msg: 'Missing required information about the schedule'
+            });
+        } else {
+            ParkingSpot.findByIdAndUpdate(
+                req.body.parkingSpotId,
+                {
+                    schedule: {
+                        startDate: req.body.startDate,
+                        startTime: req.body.startTime,
+                        endTime: req.body.endTime,
+                        endDate: req.body.endDate,
+                        isActive: req.body.isActive
+                    }
+                },
+                function (err, result) {
+                    if(err) {
+                        res.json({
+                            success: false,
+                            msg: 'Could not add schedule to parking spot!'
+                        });
+                    } else {
+                        if(result) {
+                            res.json({
+                                success: true,
+                                msg: 'Schedule successfully added to parking spot!',
+                                parkingSpot: result
+                            });
+                        }
+                        else {
+                            res.json({
+                                success: false,
+                                msg: 'Querry returned null!',
+                            });
+                        }
+                    }
+                }
+            );
         }
     },
 

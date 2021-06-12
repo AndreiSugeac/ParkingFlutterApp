@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:sharp_parking_app/DTO/Car.dart';
+import 'package:sharp_parking_app/DTO/ParkingSpot.dart';
+import 'package:sharp_parking_app/screen/redirectParkingBlockScreen.dart';
+import 'package:sharp_parking_app/services/parking_spot_services.dart';
 import 'package:sharp_parking_app/services/secure_storage_services.dart';
 import 'package:sharp_parking_app/services/user_services.dart';
 import 'package:sharp_parking_app/utils/colors.dart';
@@ -25,17 +29,23 @@ class _ParkingFinderState extends State<ParkingFinder> {
 
   Location _location = Location();
 
+  dynamic response;
+
   StreamSubscription positionUpdate;
 
   Set<Marker> _markers = HashSet<Marker>();
 
   BitmapDescriptor _markerIcon;
 
+  bool showRedirect;
+
+  ParkingSpot selectedParkingSpot;
+
   @override
   void initState() {
     super.initState();
     //_setMarkerIcon();
-    
+    showRedirect = false;
   }
 
   @override
@@ -44,20 +54,48 @@ class _ParkingFinderState extends State<ParkingFinder> {
     super.dispose();
   }
 
-  void _onMapCreated(GoogleMapController controller) {
+  void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
 
+    response = await ParkingSpotServices().getAvailableParkingSpots();
+    List<ParkingSpot> parkingSpots = new List<ParkingSpot>();
+    DateTime filterDate = DateTime.now();
+    TimeOfDay filterTime = TimeOfDay.now();
+
+    for(var parkingSpot in response.data["parkingSpots"]) {
+      ParkingSpot spot = ParkingSpot.fromJson(parkingSpot);
+      DateTime startDate = DateTime.parse(spot.schedule['startDate']);
+      TimeOfDay startTime = TimeOfDay(hour:int.parse(spot.schedule['startTime'].split(":")[0]),minute: int.parse(spot.schedule['startTime'].split(":")[1]));
+      TimeOfDay endTime = TimeOfDay(hour:int.parse(spot.schedule['endTime'].split(":")[0]),minute: int.parse(spot.schedule['endTime'].split(":")[1]));
+      DateTime endDate = DateTime.parse(spot.schedule['endDate']);
+      if(filterDate.isAfter(startDate) && filterDate.isBefore(endDate) && filterTime.hour * 60 + filterTime.minute >= startTime.hour * 60 + startTime.minute && filterTime.hour * 60 + filterTime.minute < endTime.hour * 60 + endTime.minute ) {  
+        parkingSpots.add(spot);
+      }
+    }
+    int i = 0;
+
     setState(() {
-      _markers.add(
-      Marker(
-        markerId: MarkerId('0'),
-        position: _initialPosition,
-        infoWindow: InfoWindow(
-          title: 'Parking Spot1',
-          snippet: 'Dummy parking spot'),
-        //icon: _markerIcon
-      )
-    );
+      for(var parkingSpot in parkingSpots) {
+        i++;
+        final selected = parkingSpot;
+        _markers.add(
+          Marker(
+            markerId: MarkerId(selected.id),
+            position: LatLng(parkingSpot.location["latitude"], parkingSpot.location["longitude"]),
+            infoWindow: InfoWindow(
+              title: 'Parking Spot ' + i.toString(),
+              snippet: 'Dummy parking spot ' + i.toString(),
+            ),
+            onTap: () {
+              setState(() {
+                showRedirect = !showRedirect;
+                selectedParkingSpot = selected;
+              });
+            }
+            //icon: _markerIcon
+          )
+        );
+      }
     });
   }
 
@@ -113,6 +151,11 @@ class _ParkingFinderState extends State<ParkingFinder> {
                             target: _initialPosition,
                             zoom: 16,
                           ),
+                          onTap: (LatLng latLng) {
+                            setState(() {
+                              showRedirect = false;
+                            });
+                          },
                           markers: _markers,
                         ),
                       ),
@@ -189,7 +232,44 @@ class _ParkingFinderState extends State<ParkingFinder> {
                           ]
                         ),
                       ),
+                      
                     ],
+                  ),
+                  Padding(
+                    padding: showRedirect ? EdgeInsets.only(left: 15, top: size.height * 0.8 - size.width * 0.3) : EdgeInsets.zero,
+                    child: showRedirect ? Container( 
+                      width: size.width * 0.50,
+                      height: size.width * 0.25,
+                      color: Colors.white,
+                      child: ElevatedButton(
+                        onPressed: () => {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RedirectParkingBlock(selectedParkingSpot)),
+                        )
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.white
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            Ink(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30)
+                              ),
+                              child: SvgPicture.asset('assets/icons/RedirectButton.svg', width: size.width * 0.15, height: size.width * 0.15),
+                            ),
+                            Text(
+                              'Parking spot',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.black
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ) : null,
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(15, 40, 15, 0),
