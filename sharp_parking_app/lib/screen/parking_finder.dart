@@ -68,8 +68,11 @@ class _ParkingFinderState extends State<ParkingFinder> {
       TimeOfDay startTime = TimeOfDay(hour:int.parse(spot.schedule['startTime'].split(":")[0]),minute: int.parse(spot.schedule['startTime'].split(":")[1]));
       TimeOfDay endTime = TimeOfDay(hour:int.parse(spot.schedule['endTime'].split(":")[0]),minute: int.parse(spot.schedule['endTime'].split(":")[1]));
       DateTime endDate = DateTime.parse(spot.schedule['endDate']);
-      if(filterDate.isAfter(startDate) && filterDate.isBefore(endDate) && filterTime.hour * 60 + filterTime.minute >= startTime.hour * 60 + startTime.minute && filterTime.hour * 60 + filterTime.minute < endTime.hour * 60 + endTime.minute ) {  
-        parkingSpots.add(spot);
+      if((filterDate.isAfter(startDate) || filterDate.compareTo(endDate) == 0) && 
+        (filterDate.isBefore(endDate) || filterDate.compareTo(endDate) == 0) && 
+        filterTime.hour * 60 + filterTime.minute >= startTime.hour * 60 + startTime.minute && 
+        filterTime.hour * 60 + filterTime.minute < endTime.hour * 60 + endTime.minute ) {  
+          parkingSpots.add(spot);
       }
     }
     int i = 0;
@@ -259,11 +262,35 @@ class _ParkingFinderState extends State<ParkingFinder> {
                               ),
                               child: SvgPicture.asset('assets/icons/RedirectButton.svg', width: size.width * 0.15, height: size.width * 0.15),
                             ),
-                            Text(
-                              'Parking spot',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.black
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'Parking spot',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.black
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: size.height * 0.05,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      SvgPicture.asset('assets/icons/schedule-24px.svg', width: size.width * 0.04, height: size.width * 0.04, color: greyColor,),
+                                      Text(
+                                        selectedParkingSpot.schedule['startTime'] + ' - ' + selectedParkingSpot.schedule['endTime'],
+                                        style: TextStyle(
+                                          color: greyColor,
+                                          fontSize: 10,
+                                        
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
                               ),
                             )
                           ],

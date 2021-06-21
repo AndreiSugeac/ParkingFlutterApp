@@ -176,22 +176,74 @@ class _SchedulerState extends State<Scheduler> {
                     ),
                   ),
                   SizedBox(height: size.height * 0.075),
-                  Text(
-                    'Start time: ' + _startTimeOfDay.hour.toString() + ':' + _startTimeOfDay.minute.toString(),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500
-                    ),
+                  Container(
+                    child: _startTimeOfDay.hour < 10 && _startTimeOfDay.minute >= 10 ? 
+                    Text(
+                      'Start time: ' + '0' +_startTimeOfDay.hour.toString() + ':' + _startTimeOfDay.minute.toString(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500
+                      ),
+                    ) : _startTimeOfDay.hour < 10 && _startTimeOfDay.minute < 10 ? 
+                    Text(
+                      'Start time: ' + '0' +_startTimeOfDay.hour.toString() + ':' + '0' +  _startTimeOfDay.minute.toString(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500
+                      )
+                    ) : _startTimeOfDay.hour >= 10 && _startTimeOfDay.minute < 10 ? 
+                    Text(
+                    'Start time: ' +_startTimeOfDay.hour.toString() + ':' + '0' +  _startTimeOfDay.minute.toString(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500
+                      )
+                    ) : Text(
+                      'Start time: ' +_startTimeOfDay.hour.toString() + ':'+  _startTimeOfDay.minute.toString(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500
+                      )
+                    )
                   ),
                   SizedBox(height: size.height * 0.065),
-                  Text(
-                    'End time: ' + _endTimeOfDay.hour.toString() + ':' + _endTimeOfDay.minute.toString(),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500
-                    ),
+                  Container(
+                    child: _endTimeOfDay.hour < 10 && _endTimeOfDay.minute >= 10 ? 
+                    Text(
+                      'End time: ' + '0' +_endTimeOfDay.hour.toString() + ':' + _endTimeOfDay.minute.toString(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500
+                      ),
+                    ) : _endTimeOfDay.hour < 10 && _endTimeOfDay.minute < 10 ? 
+                    Text(
+                      'End time: ' + '0' +_endTimeOfDay.hour.toString() + ':' + '0' +  _endTimeOfDay.minute.toString(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500
+                      )
+                    ) : _endTimeOfDay.hour >= 10 && _endTimeOfDay.minute < 10 ? 
+                    Text(
+                    'End time: ' +_endTimeOfDay.hour.toString() + ':' + '0' +  _endTimeOfDay.minute.toString(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500
+                      )
+                    ) : Text(
+                      'End time: ' +_endTimeOfDay.hour.toString() + ':'+  _endTimeOfDay.minute.toString(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500
+                      )
+                    )
                   ),
                   SizedBox(height: size.height * 0.075),
                   Text(
@@ -204,70 +256,73 @@ class _SchedulerState extends State<Scheduler> {
                   ),
                 ]
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ElevatedButton(
-                    onPressed: () => {
-                      selectStartDate(context)
-                    }, 
-                    child: Text(
-                      'SELECT',
-                      style: TextStyle(
-                        color: Colors.white,
+              Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ElevatedButton(
+                      onPressed: () => {
+                        selectStartDate(context)
+                      }, 
+                      child: Text(
+                        'SELECT',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: primaryColor
                       ),
                     ),
-                    style: ElevatedButton.styleFrom(
-                      primary: primaryColor
-                    ),
-                  ),
-                  SizedBox(height: size.height * 0.025),
-                  ElevatedButton(
-                    onPressed: () => {
-                      selectStartTime(context)
-                    }, 
-                    child: Text(
-                      'SELECT',
-                      style: TextStyle(
-                        color: Colors.white,
+                    SizedBox(height: size.height * 0.025),
+                    ElevatedButton(
+                      onPressed: () => {
+                        selectStartTime(context)
+                      }, 
+                      child: Text(
+                        'SELECT',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: primaryColor
                       ),
                     ),
-                    style: ElevatedButton.styleFrom(
-                      primary: primaryColor
-                    ),
-                  ),
-                  SizedBox(height: size.height * 0.025),
-                  ElevatedButton(
-                    onPressed: () => {
-                      selectEndTime(context)
-                    }, 
-                    child: Text(
-                      'SELECT',
-                      style: TextStyle(
-                        color: Colors.white,
+                    SizedBox(height: size.height * 0.025),
+                    ElevatedButton(
+                      onPressed: () => {
+                        selectEndTime(context)
+                      }, 
+                      child: Text(
+                        'SELECT',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: primaryColor
                       ),
                     ),
-                    style: ElevatedButton.styleFrom(
-                      primary: primaryColor
-                    ),
-                  ),
-                  SizedBox(height: size.height * 0.025),
-                  ElevatedButton(
-                    onPressed: () => {
-                      selectEndDate(context)
-                    }, 
-                    child: Text(
-                      'SELECT',
-                      style: TextStyle(
-                        color: Colors.white,
+                    SizedBox(height: size.height * 0.025),
+                    ElevatedButton(
+                      onPressed: () => {
+                        selectEndDate(context)
+                      }, 
+                      child: Text(
+                        'SELECT',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: primaryColor
-                    ),
-                  )
-                ]
-              )
+                      style: ElevatedButton.styleFrom(
+                        primary: primaryColor
+                      ),
+                    )
+                  ]
+                ) 
+              ),
             ],
           ),
           SizedBox(height: size.height * 0.06),

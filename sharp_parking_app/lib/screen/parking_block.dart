@@ -378,7 +378,7 @@ class _ParkingBlockState extends State<ParkingBlock> {
     return FutureBuilder(
       future: ParkingSpotServices().getParkingSpotById(_owner.parkingSpotId),
       builder: (context, snapshot) {
-        if(snapshot.connectionState == ConnectionState.done) {
+        if(snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
           return WillPopScope(
             onWillPop: () async {
               if(_connected) {
@@ -480,12 +480,12 @@ class _ParkingBlockState extends State<ParkingBlock> {
                           Text(
                             'Block',
                             style: TextStyle(
-                              color: _connected ? pinkColor : Colors.grey.shade500,
+                              color: _connected ? thirdColor : Colors.grey.shade500,
                               fontSize: 17
                             ),
                           ),
                           SizedBox(height: size.height * 0.02),
-                          ParkingBlockButton(snapshot.data.data['parkingSpot']['_id'], true, RaisedBlockIcon(), raiseParkingBlock, _bleDevice != null ? (_connected && _lowered) : false, _connected ? pinkColor : Colors.grey.shade500)
+                          ParkingBlockButton(snapshot.data.data['parkingSpot']['_id'], true, RaisedBlockIcon(), raiseParkingBlock, _bleDevice != null ? (_connected && _lowered) : false, _connected ? thirdColor : Colors.grey.shade500)
                         ],
                       )
                     ],

@@ -291,12 +291,12 @@ class _RedirectParkingBlockState extends State<RedirectParkingBlock> {
                     Text(
                       'Block',
                       style: TextStyle(
-                        color: _connected ? pinkColor : Colors.grey.shade500,
+                        color: _connected ? thirdColor : Colors.grey.shade500,
                         fontSize: 17
                       ),
                     ),
                     SizedBox(height: size.height * 0.02),
-                    ParkingBlockButton(_parkingSpot.id, true, RaisedBlockIcon(), raiseParkingBlock, _bleDevice != null ? (_connected && _lowered) : false, _connected ? pinkColor : Colors.grey.shade500)
+                    ParkingBlockButton(_parkingSpot.id, true, RaisedBlockIcon(), raiseParkingBlock, _bleDevice != null ? (_connected && _lowered) : false, _connected ? thirdColor : Colors.grey.shade500)
                   ],
                 )
               ],
