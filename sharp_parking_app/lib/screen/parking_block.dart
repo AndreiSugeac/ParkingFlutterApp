@@ -376,7 +376,7 @@ class _ParkingBlockState extends State<ParkingBlock> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return FutureBuilder(
-      future: ParkingSpotServices().getParkingSpotById(_owner.parkingSpotId),
+      future: ParkingSpotServices().getParkingSpotById(_owner.parkingSpot),
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
           return WillPopScope(
@@ -412,7 +412,7 @@ class _ParkingBlockState extends State<ParkingBlock> {
                       alignment: Alignment.center,
                     ),
                   ),
-                  SizedBox(height: 0.02 * size.height),
+                  SizedBox(height: 0.025 * size.height),
                   Container(
                     alignment: Alignment.center,
                     child: Text(
@@ -423,17 +423,17 @@ class _ParkingBlockState extends State<ParkingBlock> {
                       ),
                     ),
                   ),
-                  SizedBox(height: size.height * 0.01),
+                  SizedBox(height: size.height * 0.025),
                   Container(
-                    height: 60,
-                    width: 250,
+                    height: size.height * 0.075,
+                    width: size.width * 0.45,
                     alignment: Alignment.center,
                     child: _connected ? ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: primaryColor
                       ),
                       child: Text(
-                        'Disconnect',
+                        'DISCONNECT',
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () => {
@@ -448,7 +448,7 @@ class _ParkingBlockState extends State<ParkingBlock> {
                         _getCharacteristics(snapshot.data.data['parkingSpot']['parkingBlock']['characteristicUUID'])
                       }, 
                       child: Text(
-                        'Connect',
+                        'CONNECT',
                         style: TextStyle(color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -490,26 +490,49 @@ class _ParkingBlockState extends State<ParkingBlock> {
                       )
                     ],
                   ),
-                  SizedBox(height: size.height * 0.1),
+                  SizedBox(height: size.height * 0.05),
                   Container(
-                    width: 250,
-                    height: 60,
+                    height: size.height * 0.1,
+                    width: size.width * 0.6,
                     alignment: Alignment.center,
                     child: TextButton(
+                      style: TextButton.styleFrom(
+                        shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(15.0),
+                        ),
+                        primary: secondaryColor,
+                      ),
                       onPressed: () => {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Scheduler(snapshot.data.data['parkingSpot'].containsKey('schedule')? snapshot.data.data['parkingSpot']['schedule'] : null, snapshot.data.data['parkingSpot']['_id'])),
                         )
                       },
-                      child: Text(
-                        'SCHEDULER',
-                        style: TextStyle(
-                          color: Colors.grey.shade500
-                        ),
-                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            Icons.date_range, 
+                            color: Colors.grey.shade500, 
+                            size: 40
+                          ),
+                          SizedBox(
+                            width: 10
+                          ),
+                          Text(
+                            'SCHEDULE',
+                            textAlign:TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.grey.shade500,
+                              fontWeight: FontWeight.w800,
+                            )
+                          ),
+                        ],
+                      )
                     )
-                  )
+                  ),
                 ],
               )
             )

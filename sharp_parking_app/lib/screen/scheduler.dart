@@ -258,7 +258,7 @@ class _SchedulerState extends State<Scheduler> {
               ),
               Padding(
                 padding: EdgeInsets.only(left: 20),
-                child: Column(
+                child: !isActive ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     ElevatedButton(
@@ -321,7 +321,7 @@ class _SchedulerState extends State<Scheduler> {
                       ),
                     )
                   ]
-                ) 
+                ) : SizedBox()
               ),
             ],
           ),

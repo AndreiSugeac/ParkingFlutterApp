@@ -108,7 +108,7 @@ class _Home extends State<Home> {
                   SizedBox(height: 0.02 * size.height),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 50, 20, 0),
-                    child: snapshot.data.parkingSpotId != null ? Row(
+                    child: snapshot.data.parkingSpot != null ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         HomeScreenBtn(ParkingBlockIcon(), ParkingBlock(snapshot.data)),

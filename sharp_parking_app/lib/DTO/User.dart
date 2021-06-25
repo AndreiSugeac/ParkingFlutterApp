@@ -6,7 +6,7 @@ class User {
   String lastName;
   String email;
   Object cars;
-  String parkingSpotId;
+  String parkingSpot;
 
   User({
     @required this.id, 
@@ -14,7 +14,7 @@ class User {
     @required this.lastName, 
     @required this.email,
     @required this.cars,
-    this.parkingSpotId
+    this.parkingSpot
   });
 
   factory User.fromJson(Map<String, dynamic> json) => new User(
@@ -23,7 +23,7 @@ class User {
         lastName: json["lastName"] == null ? null : json["lastName"],
         email: json["email"] == null ? null : json["email"],
         cars: json["cars"] == null ? null : json["cars"],
-        parkingSpotId: json["parkingSpot"] == null ? null : json["parkingSpot"]
+        parkingSpot: json["parkingSpot"] == null ? null : json["parkingSpot"]
     );
 
     Map<String, dynamic> toJson() => {
@@ -31,6 +31,7 @@ class User {
       "firstName": firstName == null ? null : firstName,
       "lastName": lastName == null ? null : lastName,
       "email": email == null ? null : email,
-      "cars" : cars == null ? null : cars
+      "cars" : cars == null ? null : cars,
+      "parkingSpot": parkingSpot == null ? null : parkingSpot
     };
 }

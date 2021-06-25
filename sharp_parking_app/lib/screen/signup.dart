@@ -117,50 +117,58 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      home: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SingleChildScrollView(
-          reverse: true,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 0.07 * size.height),
-                IconSharP(),
-                Container(
-                  child: Text(
-                    'Create an account',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                    )
-                  ),
-                  alignment: Alignment.center,
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(40, 50, 40, 20),
-                  child: Theme(
-                    data: ThemeData(
-                      fontFamily: 'Roboto',
-                      primaryColor: primaryColor,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: MaterialApp(
+        home: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: SingleChildScrollView(
+            reverse: true,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: 0.07 * size.height),
+                  IconSharP(),
+                  Container(
+                    child: Text(
+                      'Create an account',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                      )
                     ),
-                    child: pageNr == 1 ? buildFirstPage(size) : buildSecondPage(size),
+                    alignment: Alignment.center,
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 30),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      for (int i = 1; i < 3; i++)
-                        PageIndicator(i == pageNr),
-                    ],
+                  Container(
+                    padding: EdgeInsets.fromLTRB(40, 50, 40, 20),
+                    child: Theme(
+                      data: ThemeData(
+                        fontFamily: 'Roboto',
+                        primaryColor: primaryColor,
+                      ),
+                      child: pageNr == 1 ? buildFirstPage(size) : buildSecondPage(size),
+                    ),
                   ),
-                ),
-              ]
+                  Container(
+                    margin: EdgeInsets.only(bottom: 30),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        for (int i = 1; i < 3; i++)
+                          PageIndicator(i == pageNr),
+                      ],
+                    ),
+                  ),
+                ]
+              )
             )
           )
         )
