@@ -41,6 +41,8 @@ class _ParkingBlockState extends State<ParkingBlock> {
 
   bool _connected = false;
 
+  bool _availability = true;
+
   FlutterBlue _flutterBlue = FlutterBlue.instance;
 
   StreamSubscription scanSubscription;
@@ -110,6 +112,7 @@ class _ParkingBlockState extends State<ParkingBlock> {
       }
     
       setState(() {
+        _availability = false;
         _lowered = true;
         _raised = false;
       });
@@ -127,6 +130,7 @@ class _ParkingBlockState extends State<ParkingBlock> {
       }
 
       setState(() {
+        _availability = false;
         _lowered = false;
         _raised = true;
       });
@@ -379,6 +383,7 @@ class _ParkingBlockState extends State<ParkingBlock> {
       future: ParkingSpotServices().getParkingSpotById(_owner.parkingSpot),
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+          _availability = snapshot.data.data['parkingSpot']['available'];
           return WillPopScope(
             onWillPop: () async {
               if(_connected) {
@@ -466,12 +471,12 @@ class _ParkingBlockState extends State<ParkingBlock> {
                           Text(
                             'Access',
                             style: TextStyle(
-                              color: _connected ? secondaryColor : Colors.grey.shade500,
+                              color: _connected ? (_availability ? secondaryColor : Colors.grey.shade500) : Colors.grey.shade500,
                               fontSize: 17
                             ),
                           ),
                           SizedBox(height: size.height * 0.02),
-                          ParkingBlockButton(snapshot.data.data['parkingSpot']['_id'], false, AvailableParkingIcon(), lowerParkingBlock, _bleDevice != null ? (_connected && _raised) : false, _connected ? secondaryColor : Colors.grey.shade500),
+                          ParkingBlockButton(snapshot.data.data['parkingSpot']['_id'], false, AvailableParkingIcon(), _connected ? (_availability ? lowerParkingBlock : () => {}) : () => {}, _bleDevice != null ? (_connected && _availability) : false, _connected ? (_availability ? secondaryColor : Colors.grey.shade500) : Colors.grey.shade500),
                         ],
                       ),
                       SizedBox(width: size.width * 0.1),
@@ -480,12 +485,12 @@ class _ParkingBlockState extends State<ParkingBlock> {
                           Text(
                             'Block',
                             style: TextStyle(
-                              color: _connected ? thirdColor : Colors.grey.shade500,
+                              color: _connected ? (!_availability ? thirdColor : Colors.grey.shade500) : Colors.grey.shade500,
                               fontSize: 17
                             ),
                           ),
                           SizedBox(height: size.height * 0.02),
-                          ParkingBlockButton(snapshot.data.data['parkingSpot']['_id'], true, RaisedBlockIcon(), raiseParkingBlock, _bleDevice != null ? (_connected && _lowered) : false, _connected ? thirdColor : Colors.grey.shade500)
+                          ParkingBlockButton(snapshot.data.data['parkingSpot']['_id'], true, RaisedBlockIcon(), _connected ? (!_availability ? raiseParkingBlock : () => {}) : () => {}, _bleDevice != null ? (_connected && !_availability) : false, _connected ? (!_availability ? thirdColor : Colors.grey.shade500) : Colors.grey.shade500),
                         ],
                       )
                     ],
@@ -545,263 +550,3 @@ class _ParkingBlockState extends State<ParkingBlock> {
     );
   }
 }
-
-// import 'dart:convert';
-// import 'dart:typed_data';
-// import 'dart:ui';
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_ble_lib/flutter_ble_lib.dart';
-// import 'package:sharp_parking_app/services/bluetooth_services.dart';
-// import 'package:sharp_parking_app/utils/colors.dart';
-// import 'package:sharp_parking_app/widgets/buttons/parking_block_button.dart';
-// import 'package:sharp_parking_app/widgets/icons/available_parking.dart';
-// import 'package:sharp_parking_app/widgets/icons/raised_block_icon.dart';
-
-// class ParkingBlock extends StatefulWidget {
-
-//   ParkingBlock();
-
-//   @override
-//   _ParkingBlockState createState() => _ParkingBlockState();
-// }
-
-// class _ParkingBlockState extends State<ParkingBlock> {
-
-//   bool _lowered = false;
-
-//   bool _raised = true;
-
-//   bool _connected = false;
-
-//   final BleSingletonServices _ble = BleSingletonServices.instance;
-
-//   BluetoothState _bleState;
-
-//   Peripheral _parkingBlock;
-
-//   List<Service> _services;
-
-//   List<Characteristic> _characteristics;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     WidgetsBinding.instance.addPostFrameCallback((_){
-//       createClient();
-//     });
-//     getDevice();
-//   }
-
-//   @override
-//   void dispose() {
-//     disconnectFromParkingBlock();
-//     destroyClient();
-//     super.dispose();
-//   }
-
-//   createClient() async {
-//     await _ble.bleManager.createClient();
-//   }
-
-//   destroyClient() async {
-//     await _ble.bleManager.destroyClient();
-//   }
-
-//   enableBluetooth() async {
-//     await _ble.bleManager.enableRadio();
-//   }
-
-//   void getDevice() {
-//     try {
-//       // _bleManager.startPeripheralScan().listen((scanResult) {
-//       //   print("Scanned peripheral name is: " + scanResult.peripheral.name);
-//       //   _parkingBlock = scanResult.peripheral;
-//       //   _bleManager.stopPeripheralScan();
-//       // });
-//       // _ble.bleManager.startPeripheralScan(
-//       // ).listen((scanResult) {
-//       //     //Scan one peripheral and stop scanning
-//       //     _parkingBlock = scanResult.peripheral;
-//       //     print("Scanned Peripheral ${scanResult.peripheral.name}");
-//       //     _ble.bleManager.stopPeripheralScan();
-//       // });
-//       _parkingBlock = _ble.bleManager.createUnsafePeripheral("00:13:AA:00:B5:96");
-//     } on Exception catch(err) {
-//       print(err);
-//     }
-//   }
-
-//   Future<void> connectToParkingBlock() async {
-//     try {
-//       await _parkingBlock.connect(timeout: Duration(seconds: 10), refreshGatt: true);
-//     } on Exception catch(err) {
-//       print(err);
-//     }
-//   }
-
-//   Future<void> disconnectFromParkingBlock() async {
-//     if(_connected == true) {
-//       try {
-//         await _parkingBlock.disconnectOrCancelConnection();
-//       } on Exception catch (err) {
-//         print(err);
-//       }
-//     }
-//   }
-
-//   Future<void> checkConnection() async {
-//     bool isConnected;
-//     try {
-//       isConnected = await _parkingBlock.isConnected();
-//     } on Exception catch (err) {
-//       print(err);
-//       return;
-//     } finally {
-//       setState(() {
-//         _connected = isConnected;
-//       });
-//     }
-//   }
-
-//   Future<void> getServicesAndCharacteristics() async {
-//     List<Service> services;
-//     List<Characteristic> characteristics;
-//     if(_connected == true) {
-//       try {
-//         services = await _parkingBlock.services();
-//         characteristics = await _parkingBlock.characteristics("0000FFE0-0000-1000-8000-00805F9B34FB");
-//       } on Exception catch (err) {
-//         print(err);
-//       }
-
-//       setState(() {
-//         _services = services;
-//         _characteristics = characteristics;
-//       });
-//     }
-//   }
-
-//   Future<void> lowerParkingBlock() async {
-//     try {
-//       await _parkingBlock.writeCharacteristic("0000FFE0-0000-1000-8000-00805F9B34FB", 
-//                                               "0000FFE1-0000-1000-8000-00805F9B34FB", 
-//                                               Uint8List.fromList([1]), false);
-//     } on Exception catch (err) {
-//       print(err);
-//       return;
-//     }
-//   }
-
-//   Future<void> raiseParkingBlock() async {
-//     try {
-//       await _parkingBlock.writeCharacteristic("0000FFE0-0000-1000-8000-00805F9B34FB", 
-//                                               "0000FFE1-0000-1000-8000-00805F9B34FB", 
-//                                               Uint8List.fromList([0]), false);
-//     } on Exception catch (err) {
-//       print(err);
-//       return;
-//     }
-//   }
-
-
-//   @override
-//   Widget build(BuildContext context) {
-//     Size size = MediaQuery.of(context).size;
-//     return Scaffold(
-//       body: Column(
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: <Widget>[
-//           SizedBox(height: 0.07 * size.height),
-//           ClipRRect(
-//             borderRadius: BorderRadius.circular(30.0),
-//             child: Container(
-//               height: 200.0,
-//               width: 200.0,
-//               color: Colors.white,
-//               child: Icon(Icons.local_parking, color: Colors.black87, size: 100,),
-//               alignment: Alignment.center,
-//             ),
-//           ),
-//           SizedBox(height: 0.02 * size.height),
-//           Container(
-//             alignment: Alignment.center,
-//             child: Text(
-//               'Personal parking spot',
-//               style: TextStyle(
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.w700
-//               ),
-//             ),
-//           ),
-//           Container(
-//             alignment: Alignment.center,
-//             child: Text(
-//               ''
-//             )
-//           ),
-//           SizedBox(height: size.height * 0.01),
-//           Container(
-//             alignment: Alignment.center,
-//             width: size.width * 0.75,
-//             height: size.height * 0.15,
-//             child: ElevatedButton(
-//               style: ElevatedButton.styleFrom(
-//                 primary: secondaryColor,
-//                 // padding: EdgeInsets.all(0.0),
-//               ),
-//               onPressed: _connected ? () async => {
-//                 await disconnectFromParkingBlock(),
-//                 await checkConnection()
-//               } : () async => {
-//                 await connectToParkingBlock(),
-//                 await checkConnection(), 
-//                 await getServicesAndCharacteristics()
-//               },
-//               child: _connected ? Text(
-//                 'Disconnect'
-//               ) : 
-//               Text(
-//                 'Connect'
-//               ),
-//             )
-//           ),
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             children: <Widget>[
-//               Column(
-//                 children: <Widget>[
-//                   Text(
-//                     'Access',
-//                     style: TextStyle(
-//                       color: primaryColor,
-//                       fontSize: 17
-//                     ),
-//                   ),
-//                   SizedBox(height: size.height * 0.02),
-//                   ParkingBlockButton(AvailableParkingIcon(), lowerParkingBlock, _parkingBlock!= null ? (_connected && _raised) : false),
-//                 ],
-//               ),
-//               SizedBox(width: size.width * 0.1),
-//               Column(
-//                 children: <Widget>[
-//                   Text(
-//                     'Block',
-//                     style: TextStyle(
-//                       color: Colors.grey.shade500,
-//                       fontSize: 17
-//                     ),
-//                   ),
-//                   SizedBox(height: size.height * 0.02),
-//                   ParkingBlockButton(RaisedBlockIcon(), raiseParkingBlock, _parkingBlock != null ? (_connected && _lowered) : false)
-//                 ],
-//               )
-//             ],
-//           )
-//         ],
-//       ) 
-//       // : _buildListViewOfDevices(),
-//     );
-//   }
-// }

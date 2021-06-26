@@ -35,6 +35,8 @@ class _RedirectParkingBlockState extends State<RedirectParkingBlock> {
 
   bool _connected = false;
 
+  bool _availability = true;
+
   FlutterBlue _flutterBlue = FlutterBlue.instance;
 
   StreamSubscription scanSubscription;
@@ -55,6 +57,7 @@ class _RedirectParkingBlockState extends State<RedirectParkingBlock> {
   void initState() {
     super.initState();
     // _getDevice();
+    _availability = _parkingSpot.available;
     _flutterBlue.state.listen((state) => {
       if(state == BluetoothState.off) {
         WarningToast('Please turn Bluetooth on!').showToast()
@@ -277,12 +280,12 @@ class _RedirectParkingBlockState extends State<RedirectParkingBlock> {
                     Text(
                       'Access',
                       style: TextStyle(
-                        color: _connected ? secondaryColor : Colors.grey.shade500,
+                        color: _connected ? (_availability ? secondaryColor : Colors.grey.shade500) : Colors.grey.shade500,
                         fontSize: 17
                       ),
                     ),
                     SizedBox(height: size.height * 0.02),
-                    ParkingBlockButton(_parkingSpot.id, false, AvailableParkingIcon(), lowerParkingBlock, _bleDevice != null ? (_connected && _raised) : false, _connected ? secondaryColor : Colors.grey.shade500),
+                    ParkingBlockButton(_parkingSpot.id, false, AvailableParkingIcon(), _connected ? (_availability ? lowerParkingBlock : () => {}) : () => {}, _bleDevice != null ? (_connected && _availability) : false, _connected ? (_availability ? secondaryColor : Colors.grey.shade500) : Colors.grey.shade500),
                   ],
                 ),
                 SizedBox(width: size.width * 0.1),
@@ -291,12 +294,12 @@ class _RedirectParkingBlockState extends State<RedirectParkingBlock> {
                     Text(
                       'Block',
                       style: TextStyle(
-                        color: _connected ? thirdColor : Colors.grey.shade500,
+                        color: _connected ? (!_availability ? thirdColor : Colors.grey.shade500) : Colors.grey.shade500,
                         fontSize: 17
                       ),
                     ),
                     SizedBox(height: size.height * 0.02),
-                    ParkingBlockButton(_parkingSpot.id, true, RaisedBlockIcon(), raiseParkingBlock, _bleDevice != null ? (_connected && _lowered) : false, _connected ? thirdColor : Colors.grey.shade500)
+                    ParkingBlockButton(_parkingSpot.id, true, RaisedBlockIcon(), _connected ? (!_availability ? raiseParkingBlock : () => {}) : () => {}, _bleDevice != null ? (_connected && !_availability) : false, _connected ? (!_availability ? thirdColor : Colors.grey.shade500) : Colors.grey.shade500),
                   ],
                 )
               ],

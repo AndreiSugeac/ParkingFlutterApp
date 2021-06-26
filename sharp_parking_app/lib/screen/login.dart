@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sharp_parking_app/screen/signup.dart';
 import 'package:sharp_parking_app/utils/secure_storage.dart';
-import 'package:sharp_parking_app/widgets/buttons/transparent_button.dart';
-
 import 'package:sharp_parking_app/widgets/icons/sharp_icon.dart';
 import 'package:sharp_parking_app/utils/colors.dart';
 import 'package:sharp_parking_app/widgets/toasts/success_toast.dart';
