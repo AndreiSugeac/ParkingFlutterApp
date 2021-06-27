@@ -127,7 +127,8 @@ class _ParkingFinderState extends State<ParkingFinder> {
                 currentFocus.unfocus();
               }
             },
-            child:Stack(
+            child: SingleChildScrollView(
+              child: Stack(
             children: <Widget> [
               Column(
                 children: <Widget>[
@@ -151,112 +152,114 @@ class _ParkingFinderState extends State<ParkingFinder> {
                   Container(
                     alignment: Alignment.center,
                     height: size.height * 0.20,
-                    child:Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.fromLTRB(0, 0, 7.5, 3),
-                          height: size.height * 0.1,
-                          width: size.width * 0.60,
-                          // alignment: AlignmentDirectional.topCenter,
-                          // child: TextField(
-                          //   controller: _controller,
-                          //   onTap: () async {
-                          //     // should show search screen here
-                          //     showSearch(
-                          //       context: context,
-                          //       // we haven't created AddressSearch class
-                          //       // this should be extending SearchDelegate
-                          //       delegate: AddressSearch(),
-                          //     );
-                          //   },
-                          //   decoration: InputDecoration(
-                          //     icon: Container(
-                          //       alignment: Alignment.center,
-                          //       margin: EdgeInsets.only(left: 20),
-                          //       width: 10,
-                          //       height: 10,
-                          //       child: Icon(
-                          //         Icons.search,
-                          //         size: 22,
-                          //         color: Colors.black87,
-                          //       ),
-                          //     ),
-                          //     hintText: "Search parking",
-                          //     hintStyle: TextStyle(
-                          //       fontSize: 18,
-                          //       fontWeight: FontWeight.w600,
-                          //       color: Colors.black87
-                          //     ),
-                          //     border: InputBorder.none,
-                          //     contentPadding: EdgeInsets.only(left: 8.0, top: 16.0),
-                          //   ),
-                          // ),
-                          child: TextButton(
-                            onPressed: () async {
-                              final sessionToken = Uuid().v4();
-                              final Suggestion result = await showSearch(
-                                context: context,
-                                delegate: AddressSearch(sessionToken),
-                              );
-                              if (result != null) {
-                                setState(() {
-                                  _controller.text = result.description;
-                                  _initialPosition = LatLng(result.lat, result.lng);
-                                });
-
-                                final GoogleMapController controller = await _mapController.future;
-                                controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
-                                  target: _initialPosition,
-                                  zoom: 16,
-                                )));
-                              }
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Search parking',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black87
-                                  ),
-                                ),
-                                SizedBox(width: 5),
-                                Icon(
-                                  Icons.search,
-                                  size: 22,
-                                  color: Colors.black87,
-                                )
-                              ]
-                            ),
-                          ),
-                        ),
                         Expanded(
                           child: Container(
-                            width: size.width * 0.15,
-                            height: size.width * 0.15,
-                            child: ElevatedButton(
-                              child: Ink(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(18)
-                                ),
-                                child: SvgPicture.asset('assets/icons/HomeIcon.svg', width: size.width * 0.075, height: size.width * 0.075, color: primaryColor),
-                              ),
-                              onPressed: () => {
-                                Navigator.pop(context)
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.fromLTRB(0, 0, 7.5, 3),
+                            height: size.height * 0.1,
+                            width: size.width * 0.60,
+                            // alignment: AlignmentDirectional.topCenter,
+                            // child: TextField(
+                            //   controller: _controller,
+                            //   onTap: () async {
+                            //     // should show search screen here
+                            //     showSearch(
+                            //       context: context,
+                            //       // we haven't created AddressSearch class
+                            //       // this should be extending SearchDelegate
+                            //       delegate: AddressSearch(),
+                            //     );
+                            //   },
+                            //   decoration: InputDecoration(
+                            //     icon: Container(
+                            //       alignment: Alignment.center,
+                            //       margin: EdgeInsets.only(left: 20),
+                            //       width: 10,
+                            //       height: 10,
+                            //       child: Icon(
+                            //         Icons.search,
+                            //         size: 22,
+                            //         color: Colors.black87,
+                            //       ),
+                            //     ),
+                            //     hintText: "Search parking",
+                            //     hintStyle: TextStyle(
+                            //       fontSize: 18,
+                            //       fontWeight: FontWeight.w600,
+                            //       color: Colors.black87
+                            //     ),
+                            //     border: InputBorder.none,
+                            //     contentPadding: EdgeInsets.only(left: 8.0, top: 16.0),
+                            //   ),
+                            // ),
+                            child: TextButton(
+                              onPressed: () async {
+                                final sessionToken = Uuid().v4();
+                                final Suggestion result = await showSearch(
+                                  context: context,
+                                  delegate: AddressSearch(sessionToken),
+                                );
+                                if (result != null) {
+                                  setState(() {
+                                    _controller.text = result.description;
+                                    _initialPosition = LatLng(result.lat, result.lng);
+                                  });
+
+                                  final GoogleMapController controller = await _mapController.future;
+                                  controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
+                                    target: _initialPosition,
+                                    zoom: 16,
+                                  )));
+                                }
                               },
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18)
-                                ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'Search parking',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black87
+                                    ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Icon(
+                                    Icons.search,
+                                    size: 22,
+                                    color: Colors.black87,
+                                  )
+                                ]
                               ),
                             ),
                           ),
                         ),
+                          Expanded(
+                            child: Container(
+                              width: size.width * 0.15,
+                              height: size.width * 0.15,
+                              child: ElevatedButton(
+                                child: Ink(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(18)
+                                  ),
+                                  child: SvgPicture.asset('assets/icons/HomeIcon.svg', width: size.width * 0.075, height: size.width * 0.075, color: primaryColor),
+                                ),
+                                onPressed: () => {
+                                  Navigator.pop(context)
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18)
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                       ]
                     ),
                     padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
@@ -276,7 +279,6 @@ class _ParkingFinderState extends State<ParkingFinder> {
                       ]
                     ),
                   ),
-                  
                 ],
               ),
               Padding(
@@ -483,6 +485,7 @@ class _ParkingFinderState extends State<ParkingFinder> {
             ]
           )
         )
+          )
       )
     );
   }
