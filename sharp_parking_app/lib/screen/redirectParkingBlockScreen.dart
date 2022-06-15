@@ -35,7 +35,7 @@ class _RedirectParkingBlockState extends State<RedirectParkingBlock> {
 
   bool _connected = false;
 
-  bool _availability = true;
+  bool _availability;
 
   FlutterBlue _flutterBlue = FlutterBlue.instance;
 
@@ -94,6 +94,7 @@ class _RedirectParkingBlockState extends State<RedirectParkingBlock> {
       }
     
       setState(() {
+        _availability = false;
         _lowered = true;
         _raised = false;
       });
@@ -111,6 +112,7 @@ class _RedirectParkingBlockState extends State<RedirectParkingBlock> {
       }
 
       setState(() {
+        _availability = true;
         _lowered = false;
         _raised = true;
       });

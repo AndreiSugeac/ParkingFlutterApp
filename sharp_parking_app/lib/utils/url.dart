@@ -1,3 +1,3 @@
 class Url {
-  static final serverURL = 'http://192.168.1.12:3000';
+  static final serverURL = 'http://192.168.175.1:3000';
 }

@@ -43,7 +43,7 @@ class AddressSearch extends SearchDelegate<Suggestion> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: FutureBuilder(
-          future: query == "" ? null : placeProvider.fetchSuggestions(query, Localizations.localeOf(context).languageCode),
+          future: query == "" ? null : placeProvider.getSuggestions(query, Localizations.localeOf(context).languageCode),
           builder: (context, snapshot) => query == '' ? 
             Container(
               padding: EdgeInsets.all(16.0),
@@ -61,7 +61,7 @@ class AddressSearch extends SearchDelegate<Suggestion> {
               itemCount: snapshot.data.length,
             ) : 
             Container(child: Text('Searching...')),
-              )
+          )
     );
   }
 }

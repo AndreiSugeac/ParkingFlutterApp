@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sharp_parking_app/utils/colors.dart';
 
 class ParkingBlockButton extends StatelessWidget {
-  final String parkingSpotId;
+  final int parkingSpotId;
   final bool available;
   final Widget _btnIcon;
   final dynamic _btnAction;

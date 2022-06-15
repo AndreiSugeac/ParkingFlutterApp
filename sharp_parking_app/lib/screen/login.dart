@@ -59,130 +59,133 @@ class _Login extends State<Login> {
         }
       },
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           resizeToAvoidBottomInset: false,
-          body: Column(
-            children: <Widget>[
-              SizedBox(height: 0.07 * size.height),
-              IconSharP(),
-              Container(
-                child: Text(
-                  'Log In',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20,
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 0.07 * size.height),
+                IconSharP(),
+                Container(
+                  child: Text(
+                    'Log In',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                    )
+                  ),
+                  alignment: Alignment.center,
+                ),
+                SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(40, 50, 40, 20),
+                  child: Theme(
+                    data: ThemeData(
+                      fontFamily: 'Roboto',
+                      primaryColor: primaryColor,
+                    ),
+                    child: Form(
+                      child: Column(
+                        children: <Widget>[
+                          TextFormField(
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              labelText: 'Email',
+                              focusColor: primaryColor,
+                              hintText: 'Enter email',
+                            ),
+                          ),
+                          SizedBox(height: 0.035 * size.height),
+                          TextFormField(
+                            controller: _passwordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              focusColor: primaryColor,
+                              hintText: 'Enter your password',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                // Container(
+                //   child: TextButton(
+                //     onPressed: () {
+                //         Navigator.push(
+                //         context,
+                //         MaterialPageRoute(builder: (context) => Login()),
+                //       );
+                //     },
+                //     child: Text(
+                //       'Forgot your password?',
+                //       style: TextStyle(color: primaryColor),
+                //     ),
+                //     style: flatButtonStyle,
+                //   ),
+                // ),
+                // Container(
+                //   child: CheckboxListTile(
+                //     value: false, 
+                //     onChanged: null,
+                //     checkColor: Colors.white,
+                //     activeColor: primaryColor,
+                //     title: Text(
+                //       'Keep me signed in',
+                //     ),
+                //     controlAffinity: ListTileControlAffinity.leading,
+                //     contentPadding: EdgeInsets.fromLTRB(40, 0, 30, 0),
+                //   ),
+                //   alignment: Alignment.center,
+                // ),
+                // LongButton('SIGN IN', primaryColor, Home(token), true, authentication),
+                SizedBox(height: size.height * 0.1),
+                Container(
+                  width: 0.75 * size.width,
+                  height: 0.06 * size.height,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      token = await authentication();
+                      if(token != null) {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (BuildContext context) => Home()),
+                          //ModalRoute.withName('/'),
+                          (Route<dynamic> route) => false
+                        );
+                      }
+                    },
+                    child: Text(
+                      'SIGN IN',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: loginBtnStyle,
+                  ),
+                ),
+                Container(
+                  width: 0.75 * size.width,
+                  height: 0.06 * size.height,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignUp()),
+                    );
+                    }, 
+                    child: Text(
+                      'New user? Register', 
+                      style: TextStyle(
+                        color: secondaryColor
+                      ),
+                    ),
                   )
                 ),
-                alignment: Alignment.center,
-              ),
-              SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(40, 50, 40, 20),
-                child: Theme(
-                  data: ThemeData(
-                    fontFamily: 'Roboto',
-                    primaryColor: primaryColor,
-                  ),
-                  child: Form(
-                    child: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                            focusColor: primaryColor,
-                            hintText: 'Enter email',
-                          ),
-                        ),
-                        SizedBox(height: 0.035 * size.height),
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            focusColor: primaryColor,
-                            hintText: 'Enter your password',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              // Container(
-              //   child: TextButton(
-              //     onPressed: () {
-              //         Navigator.push(
-              //         context,
-              //         MaterialPageRoute(builder: (context) => Login()),
-              //       );
-              //     },
-              //     child: Text(
-              //       'Forgot your password?',
-              //       style: TextStyle(color: primaryColor),
-              //     ),
-              //     style: flatButtonStyle,
-              //   ),
-              // ),
-              // Container(
-              //   child: CheckboxListTile(
-              //     value: false, 
-              //     onChanged: null,
-              //     checkColor: Colors.white,
-              //     activeColor: primaryColor,
-              //     title: Text(
-              //       'Keep me signed in',
-              //     ),
-              //     controlAffinity: ListTileControlAffinity.leading,
-              //     contentPadding: EdgeInsets.fromLTRB(40, 0, 30, 0),
-              //   ),
-              //   alignment: Alignment.center,
-              // ),
-              // LongButton('SIGN IN', primaryColor, Home(token), true, authentication),
-              SizedBox(height: size.height * 0.1),
-              Container(
-                width: 0.75 * size.width,
-                height: 0.06 * size.height,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    token = await authentication();
-                    if(token != null) {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (BuildContext context) => Home()),
-                        //ModalRoute.withName('/'),
-                        (Route<dynamic> route) => false
-                      );
-                    }
-                  },
-                  child: Text(
-                    'SIGN IN',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: loginBtnStyle,
-                ),
-              ),
-              Container(
-                width: 0.75 * size.width,
-                height: 0.06 * size.height,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignUp()),
-                  );
-                  }, 
-                  child: Text(
-                    'New user? Register', 
-                    style: TextStyle(
-                      color: secondaryColor
-                    ),
-                  ),
-                )
-              ),
-            ],
-          ),
+              ],
+            ),
+          )
         )
       )
     );

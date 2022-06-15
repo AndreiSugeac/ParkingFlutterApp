@@ -90,7 +90,6 @@ class _ParkingBlockState extends State<ParkingBlock> {
     scanSubscription = _flutterBlue.scan(timeout: Duration(seconds: 10)).listen((scanResult) async {
       if(scanResult.device.name.contains('ParkingBlock')) {
         _addDeviceTolist(scanResult.device);
-
         stopScanning();
       }
     });
@@ -130,7 +129,7 @@ class _ParkingBlockState extends State<ParkingBlock> {
       }
 
       setState(() {
-        _availability = false;
+        _availability = true;
         _lowered = false;
         _raised = true;
       });
@@ -216,118 +215,118 @@ class _ParkingBlockState extends State<ParkingBlock> {
    }
   }
 
-  ListView _buildListViewOfDevices() {
-    List<Container> containers = new List<Container>();
-    for (BluetoothDevice device in devicesList) {
-      if(device.name.contains('ParkingBlock')) {
-        containers.add(
-          Container(
-            height: 500,
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      Text(device.name == '' ? '(unknown device)' : device.name),
-                      Text(device.id.toString()),
-                    ],
-                  ),
-                ),
-                Column(
-                  children: <Widget>[
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.blue
-                      ),
-                      child: _connected ? Text(
-                        'Disconnect',
-                        style: TextStyle(color: Colors.white),
-                      ) : Text(
-                        'Connect',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: !_connected ? () => {
-                        _bleDevice = device,
-                        _connectToDevice()
-                      } : () => {
-                        _bleDevice = device,
-                        _disconnectDevice()
-                      },
-                    ),
-                    ElevatedButton(
-                      style: _connected ? ElevatedButton.styleFrom(
-                        primary: primaryColor
-                      ) : ElevatedButton.styleFrom(
-                        primary: Colors.grey
-                      ),
-                      child: Text(
-                        'Get Services',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: _connected ? () => {
-                        //_getServices()
-                      } : () => {
-                      },
-                    ),
-                    ElevatedButton(
-                      style: _connected ? ElevatedButton.styleFrom(
-                        primary: primaryColor
-                      ) : ElevatedButton.styleFrom(
-                        primary: Colors.grey
-                      ),
-                      child: Text(
-                        'Get Characteristics',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: _connected ? () => {
-                        //_getCharacteristics()
-                      } : () => {
-                      },
-                    ),
-                    ElevatedButton(
-                      style: _connected ? ElevatedButton.styleFrom(
-                        primary: primaryColor
-                      ) : ElevatedButton.styleFrom(
-                        primary: Colors.grey
-                      ),
-                      child: Text(
-                        'Raise',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: _connected && _lowered ? () => {
-                      } : () => {
-                      },
-                    ),
-                    ElevatedButton(
-                      style: _connected ? ElevatedButton.styleFrom(
-                        primary: primaryColor
-                      ) : ElevatedButton.styleFrom(
-                        primary: Colors.grey
-                      ),
-                      child: Text(
-                        'Lower',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: _connected && _raised ? () => {
-                      } : () => {
-                      },
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-        );
-      }
-    }
+  // ListView _buildListViewOfDevices() {
+  //   List<Container> containers = new List<Container>();
+  //   for (BluetoothDevice device in devicesList) {
+  //     if(device.name.contains('ParkingBlock')) {
+  //       containers.add(
+  //         Container(
+  //           height: 500,
+  //           child: Row(
+  //             children: <Widget>[
+  //               Expanded(
+  //                 child: Column(
+  //                   children: <Widget>[
+  //                     Text(device.name == '' ? '(unknown device)' : device.name),
+  //                     Text(device.id.toString()),
+  //                   ],
+  //                 ),
+  //               ),
+  //               Column(
+  //                 children: <Widget>[
+  //                   ElevatedButton(
+  //                     style: ElevatedButton.styleFrom(
+  //                       primary: Colors.blue
+  //                     ),
+  //                     child: _connected ? Text(
+  //                       'Disconnect',
+  //                       style: TextStyle(color: Colors.white),
+  //                     ) : Text(
+  //                       'Connect',
+  //                       style: TextStyle(color: Colors.white),
+  //                     ),
+  //                     onPressed: !_connected ? () => {
+  //                       _bleDevice = device,
+  //                       _connectToDevice()
+  //                     } : () => {
+  //                       _bleDevice = device,
+  //                       _disconnectDevice()
+  //                     },
+  //                   ),
+  //                   ElevatedButton(
+  //                     style: _connected ? ElevatedButton.styleFrom(
+  //                       primary: primaryColor
+  //                     ) : ElevatedButton.styleFrom(
+  //                       primary: Colors.grey
+  //                     ),
+  //                     child: Text(
+  //                       'Get Services',
+  //                       style: TextStyle(color: Colors.white),
+  //                     ),
+  //                     onPressed: _connected ? () => {
+  //                       //_getServices()
+  //                     } : () => {
+  //                     },
+  //                   ),
+  //                   ElevatedButton(
+  //                     style: _connected ? ElevatedButton.styleFrom(
+  //                       primary: primaryColor
+  //                     ) : ElevatedButton.styleFrom(
+  //                       primary: Colors.grey
+  //                     ),
+  //                     child: Text(
+  //                       'Get Characteristics',
+  //                       style: TextStyle(color: Colors.white),
+  //                     ),
+  //                     onPressed: _connected ? () => {
+  //                       //_getCharacteristics()
+  //                     } : () => {
+  //                     },
+  //                   ),
+  //                   ElevatedButton(
+  //                     style: _connected ? ElevatedButton.styleFrom(
+  //                       primary: primaryColor
+  //                     ) : ElevatedButton.styleFrom(
+  //                       primary: Colors.grey
+  //                     ),
+  //                     child: Text(
+  //                       'Raise',
+  //                       style: TextStyle(color: Colors.white),
+  //                     ),
+  //                     onPressed: _connected && _lowered ? () => {
+  //                     } : () => {
+  //                     },
+  //                   ),
+  //                   ElevatedButton(
+  //                     style: _connected ? ElevatedButton.styleFrom(
+  //                       primary: primaryColor
+  //                     ) : ElevatedButton.styleFrom(
+  //                       primary: Colors.grey
+  //                     ),
+  //                     child: Text(
+  //                       'Lower',
+  //                       style: TextStyle(color: Colors.white),
+  //                     ),
+  //                     onPressed: _connected && _raised ? () => {
+  //                     } : () => {
+  //                     },
+  //                   ),
+  //                 ],
+  //               )
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     }
+  //   }
  
-    return ListView(
-      padding: const EdgeInsets.all(8),
-      children: <Widget>[
-        ...containers,
-      ],
-    );
-  }
+  //   return ListView(
+  //     padding: const EdgeInsets.all(8),
+  //     children: <Widget>[
+  //       ...containers,
+  //     ],
+  //   );
+  // }
 
   // Container _buildParkingBlockContainer() {
   //   Container container;

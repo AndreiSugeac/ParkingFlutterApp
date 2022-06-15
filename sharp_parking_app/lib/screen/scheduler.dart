@@ -7,7 +7,7 @@ import 'package:sharp_parking_app/widgets/toasts/warning_toast.dart';
 class Scheduler extends StatefulWidget {
 
   Map schedule;
-  String parkingSpotId;
+  int parkingSpotId;
 
   Scheduler(this.schedule, this.parkingSpotId);
 
@@ -18,7 +18,7 @@ class Scheduler extends StatefulWidget {
 class _SchedulerState extends State<Scheduler> {
 
   Map schedule;
-  String parkingSpotId;
+  int parkingSpotId;
   bool isActive;
 
   _SchedulerState(this.schedule, this.parkingSpotId) {
@@ -78,10 +78,6 @@ class _SchedulerState extends State<Scheduler> {
       warning.showToast();
       return null;
     }
-
-    setState(() {
-      isActive = !isActive;
-    });
   }
 
   Future<void> removeSchedule() async {
@@ -97,10 +93,6 @@ class _SchedulerState extends State<Scheduler> {
       warning.showToast();
       return null;
     }
-
-    setState(() {
-      isActive = !isActive;
-    });
   }
 
   Future<Null> selectEndTime(BuildContext context) async {
@@ -332,7 +324,10 @@ class _SchedulerState extends State<Scheduler> {
             width: size.width * 0.75,
             child: ElevatedButton(
               onPressed: !isActive ? () => {
-                setSchedule()
+                setSchedule(),
+                setState(() {
+                  isActive = !isActive;
+                })
               } : () => {}, 
               child: Text(
                 'SET SCHEDULE',
@@ -353,7 +348,10 @@ class _SchedulerState extends State<Scheduler> {
             width: size.width * 0.75,
             child: ElevatedButton(
               onPressed: isActive ? () => {
-                removeSchedule()
+                removeSchedule(),
+                setState(() {
+                  isActive = !isActive;
+                })
               } : () => {}, 
               child: Text(
                 'REMOVE SCHEDULE',

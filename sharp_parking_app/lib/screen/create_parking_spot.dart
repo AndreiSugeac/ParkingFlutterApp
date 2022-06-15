@@ -10,7 +10,7 @@ import 'package:sharp_parking_app/widgets/toasts/warning_toast.dart';
 
 class CreateParkingSpot extends StatefulWidget {
 
-  final String _userId;
+  final int _userId;
 
   CreateParkingSpot(this._userId);
 
@@ -20,7 +20,7 @@ class CreateParkingSpot extends StatefulWidget {
 
 class _CreateParkingSpotState extends State<CreateParkingSpot> {
 
-  final String _userId;
+  final int _userId;
 
   _CreateParkingSpotState(this._userId);
 
@@ -30,27 +30,18 @@ class _CreateParkingSpotState extends State<CreateParkingSpot> {
 
   final _latitudeController = TextEditingController();
   final _longitudeController = TextEditingController();
-  final _macAddressController = TextEditingController();
-  final _serviceIdController = TextEditingController();
-  final _characteristicIdController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _latitudeController.addListener(_validateFields);
     _longitudeController.addListener(_validateFields);
-    _macAddressController.addListener(_validateFields);
-    _serviceIdController.addListener(_validateFields);
-    _characteristicIdController.addListener(_validateFields);
   }
 
   @override
   void dispose() {
     _latitudeController.dispose();
     _longitudeController.dispose();
-    _macAddressController.dispose();
-    _serviceIdController.dispose();
-    _characteristicIdController.dispose();
     super.dispose();
   }
 
@@ -60,12 +51,12 @@ class _CreateParkingSpotState extends State<CreateParkingSpot> {
 
   Future<bool> createParkingBlock() async {
     try {
-      var parkingSpot = await ParkingSpotServices().addParkingSpot(_latitudeController.text, _longitudeController.text, _macAddressController.text, _serviceIdController.text, _characteristicIdController.text);
+      var parkingSpot = await ParkingSpotServices().addParkingSpot(_latitudeController.text, _longitudeController.text);
       if(parkingSpot != null && parkingSpot.data['success']) {
-        var temp = parkingSpot.data["spot"]['_id'];
+        var temp = parkingSpot.data["spot"]['id'];
         var alr = 1;
 
-        await UserServices().addParkingSpotForUser(_userId, parkingSpot.data["spot"]['_id']).then((value) {
+        await UserServices().addParkingSpotForUser(_userId, parkingSpot.data["spot"]['id']).then((value) {
           if(value != null && value.data['success']) {
             response = value.data['success'];
             UserServices.logout(context);
@@ -98,6 +89,7 @@ class _CreateParkingSpotState extends State<CreateParkingSpot> {
         }
       },
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           resizeToAvoidBottomInset: false,
           body: SingleChildScrollView(
@@ -159,51 +151,7 @@ class _CreateParkingSpotState extends State<CreateParkingSpot> {
                               ),
                             ),
                             SizedBox(height: 0.02 * size.height),
-                            TextFormField(
-                              controller: _macAddressController,
-                              validator: (val) {
-                                if(_macAddressController.text.isEmpty) {
-                                  return '* mandatory';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'MAC Address',
-                                focusColor: primaryColor,
-                                hintText: 'Enter the MAC Address of your parking block',
-                              ),
-                            ),
-                            SizedBox(height: 0.02 * size.height),
-                            TextFormField(
-                              controller: _serviceIdController,
-                              validator: (val) {
-                                if(_serviceIdController.text.isEmpty) {
-                                  return '* mandatory';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'Service UUID',
-                                focusColor: primaryColor,
-                                hintText: 'Enter the service UUID of your parking block',
-                              ),
-                            ),
-                            SizedBox(height: 0.02 * size.height),
-                            TextFormField(
-                              controller: _characteristicIdController,
-                              validator: (val) {
-                                if(_characteristicIdController.text.isEmpty) {
-                                  return '* mandatory';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'Characteristic UUID',
-                                focusColor: primaryColor,
-                                hintText: 'Enter the characteristic UUID of your parking block',
-                              ),
-                            ),
-                            SizedBox(height: 0.05 * size.height),
+                            
                             LongButton('CREATE', primaryColor, Login(), true, createParkingBlock),
                           ],
                         ),

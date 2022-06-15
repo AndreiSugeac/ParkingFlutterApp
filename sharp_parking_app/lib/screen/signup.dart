@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:sharp_parking_app/services/car_services.dart';
-import 'package:sharp_parking_app/widgets/buttons/long_button.dart';
 
 import 'package:sharp_parking_app/utils/colors.dart';
+import 'package:sharp_parking_app/widgets/buttons/long_button.dart';
 import 'package:sharp_parking_app/widgets/icons/sharp_icon.dart';
-import 'package:sharp_parking_app/widgets/indicators/page_indicator.dart';
 import 'package:sharp_parking_app/widgets/toasts/success_toast.dart';
 import 'package:sharp_parking_app/widgets/toasts/warning_toast.dart';
 import 'package:sharp_parking_app/screen/login.dart';
@@ -23,12 +21,8 @@ class _SignUpState extends State<SignUp> {
 
   bool isButtonDisabled = true;
 
-  int pageNr = 1;
-
   // Form validtion
   final GlobalKey<FormState> _firstForm = GlobalKey<FormState>();
-  final GlobalKey<FormState> _secondForm = GlobalKey<FormState>();
-
 
   // first page controllers
   final _firstNameController = TextEditingController();
@@ -46,8 +40,6 @@ class _SignUpState extends State<SignUp> {
   // second page controllers
   final _brandController = TextEditingController();
   final _modelController = TextEditingController();
-  final _licensePlateController = TextEditingController();
-  final _colorController = TextEditingController();
 
   @override
   void initState() {
@@ -58,10 +50,6 @@ class _SignUpState extends State<SignUp> {
     _emailController.addListener(_validateFirstPageFields);
     _passwordController.addListener(_validateFirstPageFields);
     _confirmPassController.addListener(_validateFirstPageFields);
-    _brandController.addListener(_validateSecondPageFields);
-    _modelController.addListener(_validateSecondPageFields);
-    _licensePlateController.addListener(_validateSecondPageFields);
-    _colorController.addListener(_validateSecondPageFields);
   }
 
   @override
@@ -75,8 +63,6 @@ class _SignUpState extends State<SignUp> {
     _confirmPassController.dispose();
     _brandController.dispose();
     _modelController.dispose();
-    _licensePlateController.dispose();
-    _colorController.dispose();
     super.dispose();
   }
 
@@ -85,28 +71,18 @@ class _SignUpState extends State<SignUp> {
     isButtonDisabled = !res;
   }
 
-  _validateSecondPageFields() {
-    _secondForm.currentState.validate();
-  }
-
   Future<bool> register() async { 
     try {
-      var car = await CarServices().insertCar(_brandController.text, _modelController.text, _licensePlateController.text, _colorController.text);
-      if(car.data['success']) { 
-        await UserServices().register(_firstNameController.text, _lastNameController.text, 
-                                      _emailController.text, _passwordController.text, car.data["car"]['_id']).then((val) {
-          if(val != null && val.data['success']) {
-            response = val.data['success'];
-            SuccessToast('User registered successfully!').showToast();
-          } else {
-            response = val.data['success'];
-            WarningToast('User could not be registered!').showToast();
-          }
-        });
-      }
-      else {
-        WarningToast(car.data['msg']).showToast();
-      }
+      await UserServices().register(_firstNameController.text, _lastNameController.text, 
+                                    _emailController.text, _passwordController.text).then((val) {
+        if(val != null && val.data['success']) {
+          response = val.data['success'];
+          SuccessToast('User registered successfully!').showToast();
+        } else {
+          response = val.data['success'];
+          WarningToast('User could not be registered!').showToast();
+        }
+      });
       return response;
     } on DioError catch(err) {
       print(err.message);
@@ -125,6 +101,7 @@ class _SignUpState extends State<SignUp> {
         }
       },
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           resizeToAvoidBottomInset: false,
           body: SingleChildScrollView(
@@ -153,20 +130,20 @@ class _SignUpState extends State<SignUp> {
                         fontFamily: 'Roboto',
                         primaryColor: primaryColor,
                       ),
-                      child: pageNr == 1 ? buildFirstPage(size) : buildSecondPage(size),
+                      child: buildFirstPage(size),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 30),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        for (int i = 1; i < 3; i++)
-                          PageIndicator(i == pageNr),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   margin: EdgeInsets.only(bottom: 30),
+                  //   child: Row(
+                  //     mainAxisSize: MainAxisSize.min,
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: <Widget>[
+                  //       for (int i = 1; i < 3; i++)
+                  //         PageIndicator(i == pageNr),
+                  //     ],
+                  //   ),
+                  // ),
                 ]
               )
             )
@@ -264,126 +241,105 @@ class _SignUpState extends State<SignUp> {
             ),
           ),
           SizedBox(height: 0.05 * size.height),
-          Container(
-            width: 0.75 * size.width,
-            height: 0.06 * size.height,
-            child: ElevatedButton(
-              onPressed: isButtonDisabled ? null : () => {
-                setState(() {
-                  pageNr += 1;
-                })
-              },
-              child: Text(
-                'NEXT',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(7),
-                ),
-              )
-            ),
-          ),
+          LongButton('SIGN UP', primaryColor, Login(), true, register),
         ],
       ),
     );
   }
 
-  Widget buildSecondPage(size) {
-    return Form(
-      key: _secondForm,
-      child: Column(
-        children: <Widget>[
-          TextFormField(
-            controller: _brandController,
-            validator: (val) {
-              if(_brandController.text.isEmpty) {
-                return '* mandatory';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-              labelText: 'Car brand',
-              focusColor: primaryColor,
-              hintText: 'Enter your car brand',
-            ),
-          ),
-          SizedBox(height: 0.02 * size.height),
-          TextFormField(
-            controller: _modelController,
-            validator: (val) {
-              if(_modelController.text.isEmpty) {
-                return '* mandatory';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-              labelText: 'Car model',
-              focusColor: primaryColor,
-              hintText: 'Enter your car model',
-            ),
-          ),
-          SizedBox(height: 0.02 * size.height),
-          TextFormField(
-            controller: _licensePlateController,
-            validator: (val) {
-              if(_licensePlateController.text.isEmpty) {
-                return '* mandatory';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-              labelText: 'License plate',
-              focusColor: primaryColor,
-              hintText: 'Enter your car\'s license plate',
-            ),
-          ),
-          SizedBox(height: 0.02 * size.height),
-          TextFormField(
-            controller: _colorController,
-            validator: (val) {
-              if(_colorController.text.isEmpty) {
-                return "* mandatory";
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-              labelText: 'Car color',
-              focusColor: primaryColor,
-              hintText: 'Enter the color of your car',
-            ),
-          ),
-          SizedBox(height: 0.05 * size.height),
-          LongButton('SIGN UP', primaryColor, Login(), true, register),
-          SizedBox(height: 0.0075 * size.height),
-          Container(
-            padding: EdgeInsetsDirectional.only(top: 5, bottom: 15),
-            alignment: Alignment.center,
-            child: TextButton(
-              onPressed: () => {
-                setState(() {
-                    pageNr = 1;
-                    _brandController.clear();
-                    _modelController.clear();
-                    _licensePlateController.clear();
-                    _colorController.clear();
-                  })
-              }, 
-              child: Text(
-                'Back',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                ),
-              )
-            )
-          )
-        ],
-      ),
-    );
-  }
+  // Widget buildSecondPage(size) {
+  //   return Form(
+  //     key: _secondForm,
+  //     child: Column(
+  //       children: <Widget>[
+  //         TextFormField(
+  //           controller: _brandController,
+  //           validator: (val) {
+  //             if(_brandController.text.isEmpty) {
+  //               return '* mandatory';
+  //             }
+  //             return null;
+  //           },
+  //           decoration: InputDecoration(
+  //             labelText: 'Car brand',
+  //             focusColor: primaryColor,
+  //             hintText: 'Enter your car brand',
+  //           ),
+  //         ),
+  //         SizedBox(height: 0.02 * size.height),
+  //         TextFormField(
+  //           controller: _modelController,
+  //           validator: (val) {
+  //             if(_modelController.text.isEmpty) {
+  //               return '* mandatory';
+  //             }
+  //             return null;
+  //           },
+  //           decoration: InputDecoration(
+  //             labelText: 'Car model',
+  //             focusColor: primaryColor,
+  //             hintText: 'Enter your car model',
+  //           ),
+  //         ),
+  //         SizedBox(height: 0.02 * size.height),
+  //         TextFormField(
+  //           controller: _licensePlateController,
+  //           validator: (val) {
+  //             if(_licensePlateController.text.isEmpty) {
+  //               return '* mandatory';
+  //             }
+  //             return null;
+  //           },
+  //           decoration: InputDecoration(
+  //             labelText: 'License plate',
+  //             focusColor: primaryColor,
+  //             hintText: 'Enter your car\'s license plate',
+  //           ),
+  //         ),
+  //         SizedBox(height: 0.02 * size.height),
+  //         TextFormField(
+  //           controller: _colorController,
+  //           validator: (val) {
+  //             if(_colorController.text.isEmpty) {
+  //               return "* mandatory";
+  //             }
+  //             return null;
+  //           },
+  //           decoration: InputDecoration(
+  //             labelText: 'Car color',
+  //             focusColor: primaryColor,
+  //             hintText: 'Enter the color of your car',
+  //           ),
+  //         ),
+  //         SizedBox(height: 0.05 * size.height),
+  //         LongButton('SIGN UP', primaryColor, Login(), true, register),
+  //         SizedBox(height: 0.0075 * size.height),
+  //         Container(
+  //           padding: EdgeInsetsDirectional.only(top: 5, bottom: 15),
+  //           alignment: Alignment.center,
+  //           child: TextButton(
+  //             onPressed: () => {
+  //               setState(() {
+  //                   pageNr = 1;
+  //                   _brandController.clear();
+  //                   _modelController.clear();
+  //                   _licensePlateController.clear();
+  //                   _colorController.clear();
+  //                 })
+  //             }, 
+  //             child: Text(
+  //               'Back',
+  //               textAlign: TextAlign.center,
+  //               style: TextStyle(
+  //                 fontSize: 18,
+  //                 fontWeight: FontWeight.w500,
+  //                 color: Colors.black87,
+  //               ),
+  //             )
+  //           )
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 }

@@ -19,14 +19,50 @@ class ParkingSpotServices {
     }
   }
 
-  addParkingSpot(latitude, longitude, macAddress, serviceUUID, characteristicUUID) async {
+  getParkingSpotByUserId(id) async {
+    try {
+      String _id = id.toString();
+      final parkingSpot = await dio.get(url + '/parkingSpot/byUser/get/' + _id, options: Options(contentType: Headers.formUrlEncodedContentType));
+
+      return parkingSpot;
+    } on DioError catch(err) {
+      var warning = WarningToast(err.response.data['msg']);
+      warning.showToast();
+      return null;
+    }
+  }
+
+  getSchedulerByParkingSpotId(id) async {
+    try {
+      String _id = id.toString();
+      final scheduler = await dio.get(url + '/scheduler/byParkingSpotId/get/' + _id, options: Options(contentType: Headers.formUrlEncodedContentType));
+
+      return scheduler;
+    } on DioError catch(err) {
+      var warning = WarningToast(err.response.data['msg']);
+      warning.showToast();
+      return null;
+    }
+  }
+
+  getLocationByParkingSpotId(id) async {
+    try {
+      String _id = id.toString();
+      final scheduler = await dio.get(url + '/location/byParkingSpotId/get/' + _id, options: Options(contentType: Headers.formUrlEncodedContentType));
+
+      return scheduler;
+    } on DioError catch(err) {
+      var warning = WarningToast(err.response.data['msg']);
+      warning.showToast();
+      return null;
+    }
+  }
+
+  addParkingSpot(latitude, longitude) async {
     try {
       final parkingSpot = await dio.post(url + '/parkingSpot/add', data: {
         "latitude": latitude,
-        "longitude": longitude,
-        "macAddress": macAddress,
-        "serviceUUID": serviceUUID,
-        "characteristicUUID": characteristicUUID
+        "longitude": longitude
       }, options: Options(contentType: Headers.formUrlEncodedContentType));
       return parkingSpot;
     } on DioError catch(err) {

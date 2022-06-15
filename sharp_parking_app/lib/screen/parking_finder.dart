@@ -4,13 +4,9 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:sharp_parking_app/DTO/Car.dart';
 import 'package:sharp_parking_app/DTO/ParkingSpot.dart';
-import 'package:sharp_parking_app/screen/redirectParkingBlockScreen.dart';
 import 'package:sharp_parking_app/services/address_search_services.dart';
 import 'package:sharp_parking_app/services/parking_spot_services.dart';
-import 'package:sharp_parking_app/services/places_services.dart';
-import 'package:sharp_parking_app/services/secure_storage_services.dart';
 import 'package:sharp_parking_app/utils/colors.dart';
 import 'package:sharp_parking_app/utils/suggestion.dart';
 import 'package:uuid/uuid.dart';
@@ -65,7 +61,11 @@ class _ParkingFinderState extends State<ParkingFinder> {
     TimeOfDay filterTime = TimeOfDay.now();
 
     for(var parkingSpot in response.data["parkingSpots"]) {
+      var schedule = await ParkingSpotServices().getSchedulerByParkingSpotId(parkingSpot["id"]);
+      var location = await ParkingSpotServices().getLocationByParkingSpotId(parkingSpot["id"]);
       ParkingSpot spot = ParkingSpot.fromJson(parkingSpot);
+      spot.schedule = schedule.data["schedule"];
+      spot.location = location.data["location"];
       DateTime startDate = DateTime.parse(spot.schedule['startDate']);
       TimeOfDay startTime = TimeOfDay(hour:int.parse(spot.schedule['startTime'].split(":")[0]),minute: int.parse(spot.schedule['startTime'].split(":")[1]));
       TimeOfDay endTime = TimeOfDay(hour:int.parse(spot.schedule['endTime'].split(":")[0]),minute: int.parse(spot.schedule['endTime'].split(":")[1]));
@@ -85,7 +85,7 @@ class _ParkingFinderState extends State<ParkingFinder> {
         final selected = parkingSpot;
         _markers.add(
           Marker(
-            markerId: MarkerId(selected.id),
+            markerId: MarkerId(selected.id.toString()),
             position: LatLng(parkingSpot.location["latitude"], parkingSpot.location["longitude"]),
             infoWindow: InfoWindow(
               title: 'Parking Spot ' + i.toString(),
@@ -289,10 +289,10 @@ class _ParkingFinderState extends State<ParkingFinder> {
                   color: Colors.transparent,
                   child: ElevatedButton(
                     onPressed: () => {
-                      Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => RedirectParkingBlock(selectedParkingSpot)),
-                    )
+                    //   Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => RedirectParkingBlock(selectedParkingSpot)),
+                    // )
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.white,
@@ -421,64 +421,64 @@ class _ParkingFinderState extends State<ParkingFinder> {
                     //   ),
                     // ),
                     SizedBox(width: 0),
-                    Container(
-                      width: size.width * 0.3,
-                      height: size.width * 0.125,
-                      child: ElevatedButton(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget> [
-                            FutureBuilder<Car>(
-                              future:SecureStorageServices.getSelectedCarSS(),
-                              builder: (context, snapshot1) {
-                                if(snapshot1.connectionState == ConnectionState.done && snapshot1.data != null) {
-                                  return Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Center(
-                                        child: Text(
-                                          snapshot1.data.licensePlate,
-                                          textAlign: TextAlign.start,
-                                          textDirection: TextDirection.ltr,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 12,
-                                            color: Colors.black,
-                                          )
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }
-                                else {
-                                  return Column();
-                                }
-                              }
-                            ),
-                            SizedBox(width: 3),
-                            Expanded(
-                              child:Container(
-                                child: Ink(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(18)
-                                  ),
-                                  child: SvgPicture.asset('assets/icons/CarIcon.svg', width: size.width * 0.09, height: size.width * 0.09),
-                                ),
-                              ),
-                            ),
-                          ]
-                        ),
-                        onPressed: () => {},
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)
-                          ),
-                          alignment: Alignment.centerRight,
-                        ),
-                      ),
-                    ),
+                    // Container(
+                    //   width: size.width * 0.3,
+                    //   height: size.width * 0.125,
+                    //   child: ElevatedButton(
+                    //     child: Row(
+                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //       crossAxisAlignment: CrossAxisAlignment.center,
+                    //       children: <Widget> [
+                    //         FutureBuilder<Car>(
+                    //           future:SecureStorageServices.getSelectedCarSS(),
+                    //           builder: (context, snapshot1) {
+                    //             if(snapshot1.connectionState == ConnectionState.done && snapshot1.data != null) {
+                    //               return Column(
+                    //                 mainAxisAlignment: MainAxisAlignment.center,
+                    //                 children: <Widget>[
+                    //                   Center(
+                    //                     child: Text(
+                    //                       snapshot1.data.licensePlate,
+                    //                       textAlign: TextAlign.start,
+                    //                       textDirection: TextDirection.ltr,
+                    //                       style: TextStyle(
+                    //                         fontWeight: FontWeight.w700,
+                    //                         fontSize: 12,
+                    //                         color: Colors.black,
+                    //                       )
+                    //                     ),
+                    //                   ),
+                    //                 ],
+                    //               );
+                    //             }
+                    //             else {
+                    //               return Column();
+                    //             }
+                    //           }
+                    //         ),
+                    //         SizedBox(width: 3),
+                    //         Expanded(
+                    //           child:Container(
+                    //             child: Ink(
+                    //               decoration: BoxDecoration(
+                    //                 borderRadius: BorderRadius.circular(18)
+                    //               ),
+                    //               child: SvgPicture.asset('assets/icons/CarIcon.svg', width: size.width * 0.09, height: size.width * 0.09),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ]
+                    //     ),
+                    //     onPressed: () => {},
+                    //     style: ElevatedButton.styleFrom(
+                    //       primary: Colors.white,
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(18)
+                    //       ),
+                    //       alignment: Alignment.centerRight,
+                    //     ),
+                    //   ),
+                    // ),
                   ]
                 ),
               ),

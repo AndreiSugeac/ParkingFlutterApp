@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sharp_parking_app/DTO/ParkingSpot.dart';
+import 'package:sharp_parking_app/DTO/User.dart';
 import 'package:sharp_parking_app/screen/create_parking_spot.dart';
 import 'package:sharp_parking_app/screen/parking_block.dart';
+import 'package:sharp_parking_app/screen/scheduler.dart';
 import 'package:sharp_parking_app/screen/user.dart';
+import 'package:sharp_parking_app/services/parking_spot_services.dart';
 import 'package:sharp_parking_app/widgets/buttons/home_screen_button.dart';
 import 'package:sharp_parking_app/utils/colors.dart';
 import 'package:sharp_parking_app/widgets/icons/location_icon.dart';
@@ -18,6 +22,10 @@ class Home extends StatefulWidget {
 
 class _Home extends State<Home> {
 
+  User user;
+
+  int parkingSpotId;
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -30,7 +38,9 @@ class _Home extends State<Home> {
       future: UserServices().tokenToUser(),
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done) {
+          user = snapshot.data;
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             home: Scaffold(
               body: Column(
                 children: <Widget>[
@@ -106,74 +116,95 @@ class _Home extends State<Home> {
                     ],
                   ),
                   SizedBox(height: 0.02 * size.height),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 50, 20, 0),
-                    child: snapshot.data.parkingSpot != null ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        HomeScreenBtn(ParkingBlockIcon(), ParkingBlock(snapshot.data)),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Parking spot',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 22,
+                  FutureBuilder(
+                    future: ParkingSpotServices().getParkingSpotByUserId(snapshot.data.id),
+                    builder: (context, snapshot) {
+                      if(snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                        parkingSpotId = snapshot.data.data["hasSpot"] ? snapshot.data.data["parkingSpot"]["id"] : null;
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(40, 50, 20, 0),
+                          child: !snapshot.data.data["hasSpot"] ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              HomeScreenBtn(ParkingBlockIcon(), CreateParkingSpot(user.id)),
+                              // HomeScreenBtn(ParkingBlockIcon(), Scheduler(snapshot.data.data['parkingSpot'].containsKey('schedule')? snapshot.data.data['parkingSpot']['schedule'] : null, snapshot.data.data['parkingSpot']['_id'])),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        'Create Parking spot',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 22,
+                                        ),
+                                      ),
+                                      SizedBox(height: 0.01 * size.height),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                        child: Text(
+                                          'Create your parking spot by his location',
+                                          textAlign: TextAlign.center,
+                                          textDirection: TextDirection.ltr,
+                                          style: TextStyle(color: greyColor),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                SizedBox(height: 0.01 * size.height),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                                  child: Text(
-                                    'Access your parking spot by lowering the parking block. Also you can make schedules for when your parking spot can be available for other users.',
-                                    textAlign: TextAlign.center,
-                                    textDirection: TextDirection.ltr,
-                                    style: TextStyle(color: greyColor),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ) : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        HomeScreenBtn(ParkingBlockIcon(), CreateParkingSpot(snapshot.data.id)),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Set your parking',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 22,
-                                  ),
-                                ),
-                                SizedBox(height: 0.01 * size.height),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                                  child: Text(
-                                    'You don\'t have a parking spot assigned to your account. Create one and share it with our community. Your spot will be secured with the help of our smart parking blocks.',
-                                    textAlign: TextAlign.center,
-                                    textDirection: TextDirection.ltr,
-                                    style: TextStyle(color: greyColor),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                              ),
+                            ],
+                          ) : FutureBuilder(
+                            future: ParkingSpotServices().getSchedulerByParkingSpotId(snapshot.data.data['parkingSpot']["id"]),
+                            builder: (context, snapshot) {
+                              if(snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                                return Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      HomeScreenBtn(ParkingBlockIcon(), Scheduler(snapshot.data.data['hasSchedule'] ? snapshot.data.data['schedule'] : null, parkingSpotId)),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Text(
+                                                'Scheduler',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 22,
+                                                ),
+                                              ),
+                                              SizedBox(height: 0.01 * size.height),
+                                              Padding(
+                                                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                                child: Text(
+                                                  'Set the schedule for your parking spot.',
+                                                  textAlign: TextAlign.center,
+                                                  textDirection: TextDirection.ltr,
+                                                  style: TextStyle(color: greyColor),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                              }
+                              else {
+                                return SizedBox();
+                              }
+                            }
+                          )
+                        );
+                      }
+                      else return SizedBox();
+                    }
                   ),
+                  
                   SizedBox(height: size.height * 0.02,),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 50, 20, 0),

@@ -11,14 +11,13 @@ class UserServices {
   Dio dio = new Dio();
   String url = Url.serverURL; // contine ip adress ul de la Rosetti
 
-  Future<Response> register(firstName, lastName, email, password, carId) async {
+  Future<Response> register(firstName, lastName, email, password) async {
     try {
       final response =  await dio.post(url + '/register/user', data: {
         "firstName": firstName,
         "lastName": lastName,
         "email": email,
-        "password": password,
-        "cars": carId
+        "password": password
       }, options: Options(contentType: Headers.formUrlEncodedContentType));
       return response;
     }
@@ -68,7 +67,7 @@ class UserServices {
 
   Future<Response> addParkingSpotForUser(userId, parkingSpotId) async {
     try {
-      final response =  await dio.put(url + '/update/user/parkingSpot/' + userId + '/' + parkingSpotId, options: Options(contentType: Headers.formUrlEncodedContentType));
+      final response =  await dio.put(url + '/update/user/parkingSpot/' + userId.toString() + '/' + parkingSpotId.toString(), options: Options(contentType: Headers.formUrlEncodedContentType));
       return response;
     }
     on DioError catch(err) {
