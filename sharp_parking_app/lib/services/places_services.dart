@@ -10,7 +10,7 @@ class PlacesServices {
 
   final sessionToken;
 
-  final apiKey = 'AIzaSyAJGP0ksxkw8qXSSi-YgZSRDExZ_EwrU6U';
+  final apiKey = '';
 
   Future<List<Suggestion>> getSuggestions(String input, String lang) async {
     final request = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=$input&inputtype=textquery&fields=formatted_address,geometry,name,place_id,plus_code,types&language=$lang&key=$apiKey&sessiontoken=$sessionToken,components=country:ro';
